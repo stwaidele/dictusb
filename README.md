@@ -241,8 +241,8 @@ steckt ja dauerhaft an genau einem Rechner.
 | Zielsystem | Einstellung | Stand |
 |---|---|---|
 | Windows, deutsches Layout | `win_de` (Standard) | abgenommen |
-| Linux, deutsches Layout | `win_de` | erwartet gleichwertig, Abnahme offen |
-| Windows/Linux, US-Layout | `us` | Umstellung verifiziert, Zeichentest offen |
+| Linux, deutsches Layout | `win_de` | abgenommen (Debian: Textkonsole/TTY, X11 und Wayland) |
+| Windows/Linux, US-Layout | `us` | **ungetestet** (nur die Umschaltung auf `us` ist verifiziert) |
 | weitere (fr, uk, es, it) | `win_fr`, … | nutzbar, sobald die `.mpy` in `/lib` liegt |
 | **macOS** | — | **derzeit nicht unterstützt**, siehe unten |
 

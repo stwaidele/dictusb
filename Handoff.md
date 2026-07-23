@@ -140,7 +140,7 @@ der Wert passend gesetzt werden.
 | Ziel | Wert | Stand |
 |---|---|---|
 | Windows, deutsch | `win_de` (Default) | abgenommen |
-| Linux, deutsch | `win_de` | **abgenommen** (Debian 13, TTY + X11) |
+| Linux, deutsch | `win_de` | **abgenommen** (Debian 13, TTY + X11; Wayland 2026-07-23, Sender Windows-App) |
 | Windows/Linux, US | `us` (aus `adafruit_hid`, keine Umlaute) | Umschaltung verifiziert, **Zeichentest offen** (2026-07-21 abgebrochen: Ziel ließ sich nicht auf US stellen — Debian-TTY kennt keinen Keymap `us`, GUI läuft Wayland → `setxkbmap` wirkungslos) |
 | fr/uk/es/it | `win_fr`, … | nutzbar, sobald die `.mpy` in `/lib` liegt |
 | **macOS** | — | **bewusst offen**, Lösungswege im README |
