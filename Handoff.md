@@ -1,13 +1,13 @@
 # Handoff: dictUSB — Text live auf einen anderen Rechner tippen
 
 > Übergabedokument für die Fortsetzung in einer Claude-Code-Session.
-> Stand: 2026-07-22 — **läuft produktiv auf zwei Geräten.**
-> Zuletzt (2026-07-23): **Modifier-Tipp** (Firmware 0.18 + Direktmodus)
-> live abgenommen — Shift allein antippen beendet z. B. den
-> Bildschirmschoner des Ziels. Davor (2026-07-22): Flutter-Phasen 2–4
-> abgenommen & committet, inkl. Quittungs-Fix (wichtige Erkenntnis:
-> die Firmware quittiert NUR Lebenszeichen — siehe
-> „Lebenszeichen-Quittungen"); Linux-Ziel abgenommen (`win_de`).
+> Stand: 2026-07-23 — **läuft produktiv auf zwei Geräten** und ist
+> **öffentlich**: github.com/stwaidele/dictusb (MIT).
+> Zuletzt: Phase 5 (Veröffentlichung) größtenteils umgesetzt —
+> **nächste Schritte im Abschnitt „Veröffentlichung"** (rc2-Pipeline
+> prüfen, Screenshots, Apple-Einrichtung). Davor: Modifier-Tipp
+> (Firmware 0.18), Flutter-Phasen 2–4, Quittungs-Fix (Firmware
+> quittiert NUR Lebenszeichen — siehe „Lebenszeichen-Quittungen").
 
 ## Was das ist
 
@@ -333,15 +333,49 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
 - ⚠️ **GitHub-PRs nie über den Merge-Button mergen** (der Commit
   entstünde nur auf GitHub): stattdessen `gh pr checkout`, lokal
   mergen/testen, `git push origin main` — erreicht beide Remotes.
-- **Offen in Phase 5**: WP0 Apple-Developer-Einrichtung (Konto nie
-  genutzt) → WP3 Release-Pipeline (GitHub Actions, signiertes+
-  notarisiertes DMG, Zip, tar.gz; Tag `v1.0.0-rc1` als Probelauf) →
-  WP4 README-Ausbau (BOM mit Affiliate-Links `101010cloud-21`,
-  Screenshots, SECURITY.md) → Tag `v1.0.0` → WP6 Website
-  (werkzeugkasten.online/dictusb, Inhalt in `docs/website-content.md`
-  vorbereiten) → WP5 Gehäuse (**vorher separat besprechen**).
-  Plan-Details: Phase-5-Plandatei der Claude-Session (Pfad in
-  `PRIVAT.md`).
+- **Erledigt (2026-07-23)**: WP1 Bereinigung; WP2 Frischstart +
+  Doppel-Push (validiert); WP3 Release-Pipeline committet
+  (`.github/workflows/release.yml` — Signierung/Notarisierung
+  überspringen sich selbst, solange die Apple-Secrets fehlen; `-rc` =
+  Prerelease); WP4 README (Schnellstart, Downloads, Einkaufsliste mit
+  Affiliate-Links `101010cloud-21`, Mitmachen) + SECURITY.md;
+  App-Version **1.0.0+1**, macOS-Bundle heißt jetzt **dictUSB.app**.
+  Probelauf `v1.0.0-rc1` schlug fehl (Linux-Plattform war nie
+  gescaffoldet — behoben), **`v1.0.0-rc2` lief beim Session-Ende noch**.
+
+- **Nächste Schritte (neue Session, in dieser Reihenfolge)**:
+  1. **rc2-Ergebnis prüfen**: `curl -s https://api.github.com/repos/`
+     `stwaidele/dictusb/actions/runs?per_page=1` (oder Actions-Tab).
+     Bei Grün: Prerelease v1.0.0-rc2 mit unsigniertem DMG/Zip/tar.gz
+     existiert; DMG/Zip stichprobenartig von Stefan öffnen lassen.
+  2. **Screenshots** (`docs/img/`, dann im README einbinden):
+     Screen-Recording-Freigabe fürs Terminal ist erteilt und nach dem
+     Terminal-Neustart aktiv. Rezept: Release-App öffnen
+     (`open app/build/macos/Build/Products/Release/dictUSB.app`),
+     Geometrie per `osascript … System Events … position/size of
+     window 1`, dann `screencapture -x -R<x,y,w,h>` — Block- und
+     Direktmodus + Einstellungsdialog.
+  3. **WP0 Apple**: Stefans Developer-Programm war am 2026-07-23
+     reaktiviert, aber im Portal **noch nicht aktiv** (Xcode zeigte nur
+     „Personal Team"). Sobald aktiv: Xcode → Settings → Accounts →
+     Manage Certificates → **Developer ID Application**; P12-Export +
+     App-Store-Connect-API-Key (.p8); sechs GitHub-Secrets
+     (`MACOS_CERT_P12` base64, `MACOS_CERT_PASSWORD`, `APPLE_TEAM_ID`,
+     `APPSTORE_KEY_ID`, `APPSTORE_ISSUER_ID`, `APPSTORE_PRIVATE_KEY`);
+     lokal `security find-identity -v -p codesigning` prüfen (Stand:
+     0 Identitäten). Dann rc-Tag → signiertes DMG, `spctl -a -vv`.
+  4. **Tag `v1.0.0`** → erstes echtes Release; Abnahme DMG (Mac) und
+     Zip (Windows, SmartScreen-Verhalten) durch Stefan.
+  5. **WP6 Website**: Inhalt in `docs/website-content.md` vorbereiten
+     (Hero, Diagramm, Downloads→releases/latest, Hardware, Sicherheit,
+     FAQ); Umsetzung als Unterseite werkzeugkasten.online/dictusb im
+     separaten Werkzeugkasten-Workspace (sveltekit-tool-Konventionen).
+  6. **WP5 Gehäuse**: **erst separat mit Stefan besprechen** (eigene
+     Planungsrunde), dann OpenSCAD/`hardware/`.
+  - Außerdem Stefan (GitHub-Settings): „Private vulnerability
+    reporting" aktivieren, Repo-Beschreibung + Topics setzen.
+  - Plan-Details: Phase-5-Plandatei der Claude-Session (Pfad in
+    `PRIVAT.md`).
 
 ## Stolpersteine (ausführlich im README)
 
