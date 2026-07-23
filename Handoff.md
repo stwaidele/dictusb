@@ -3,10 +3,9 @@
 > Übergabedokument für die Fortsetzung in einer Claude-Code-Session.
 > Stand: 2026-07-23 (abends) — **läuft produktiv auf zwei Geräten**,
 > **öffentlich**: github.com/stwaidele/dictusb (MIT), und **v1.0.0 ist
-> getaggt** (Apple-Signierung/Notarisierung eingerichtet, mit rc4
-> verifiziert, App-Icon integriert; der v1.0.0-Pipeline-Lauf lief beim
-> Schreiben noch — **erster Schritt der nächsten Session: Ergebnis
-> prüfen**, Abschnitt „Veröffentlichung"). Davor: Modifier-Tipp
+> veröffentlicht und verifiziert** (signiert + notarisiert, App-Icon,
+> Screenshots im README). Nächste Schritte: **WP6 Website, WP5
+> Gehäuse** (Abschnitt „Veröffentlichung"). Davor: Modifier-Tipp
 > (Firmware 0.18), Flutter-Phasen 2–4, Quittungs-Fix (Firmware
 > quittiert NUR Lebenszeichen — siehe „Lebenszeichen-Quittungen").
 
@@ -390,28 +389,31 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   Icon-Wechsel zeigt das Dock gecacht das alte — `touch` aufs Bundle +
   `killall Dock` reicht.
 
-- **`v1.0.0` getaggt und freigegeben** (Stefan, 2026-07-23, nach
-  Icon-Abnahme im Dock). ⚠️ **Der Pipeline-Lauf lief beim Schreiben
-  dieses Stands noch** — Ergebnis prüfen!
+- **`v1.0.0` veröffentlicht und verifiziert** (2026-07-23, von Stefan
+  nach Icon-Abnahme freigegeben): Release (kein Prerelease) mit
+  DMG/Zip/tar.gz/SHA256SUMS; DMG-Prüfsumme ok, `stapler validate` ok,
+  `spctl` „accepted, source=Notarized Developer ID".
+
+- **Screenshots — erledigt (2026-07-23, `3af36c5`)**: `docs/img/
+  app-blockmodus.png` + `app-direktmodus.png` (README „Downloads")
+  und `app-einstellungen.png` (`app/README.md`). Aufgenommen mit
+  **Beispiel-Konfiguration** (Prefs-Domain `info.waidele.dictusbApp`
+  vorher per `defaults export` gesichert, Beispielgeräte
+  192.168.0.50/.51 + Dummy-Token gesetzt, danach re-importiert —
+  echte IPs/Tokens stehen sonst im Geräte-Dropdown!). Rezept:
+  Fenster-Geometrie per System Events, `screencapture -x -R…`;
+  **Klicken/Fokussieren nur mit `cliclick`** (brew) — AppleScript
+  „click at" gibt Flutter-Feldern keinen Fokus (F1/Hotkeys via
+  System Events gehen, Text landet aber nirgends); Text ins Feld =
+  `pbcopy` + Cmd+V nach `cliclick`-Klick ins Feld.
 
 - **Nächste Schritte (in dieser Reihenfolge)**:
-  1. **v1.0.0-Lauf prüfen** (`gh run list -R stwaidele/dictusb`):
-     Release (kein Prerelease) mit DMG/Zip/tar.gz/SHA256SUMS; DMG
-     herunterladen und `xcrun stapler validate` + `spctl -a -vv -t
-     open --context context:primary-signature` → beide „accepted".
-  2. **Screenshots** (`docs/img/`, dann im README einbinden):
-     Screen-Recording-Freigabe fürs Terminal ist erteilt und nach dem
-     Terminal-Neustart aktiv. Rezept: Release-App öffnen
-     (`open app/build/macos/Build/Products/Release/dictUSB.app`),
-     Geometrie per `osascript … System Events … position/size of
-     window 1`, dann `screencapture -x -R<x,y,w,h>` — Block- und
-     Direktmodus + Einstellungsdialog. Jetzt mit neuem App-Icon.
-  3. **WP6 Website**: Inhalt in `docs/website-content.md` vorbereiten
+  1. **WP6 Website**: Inhalt in `docs/website-content.md` vorbereiten
      (Hero, Diagramm, Downloads→releases/latest, Hardware, Sicherheit,
      FAQ); Umsetzung als Unterseite werkzeugkasten.online/dictusb im
      separaten Werkzeugkasten-Workspace (sveltekit-tool-Konventionen).
      Dort auch SmartScreen-/Gatekeeper-Hinweise für Nutzer erklären.
-  4. **WP5 Gehäuse**: **erst separat mit Stefan besprechen** (eigene
+  2. **WP5 Gehäuse**: **erst separat mit Stefan besprechen** (eigene
      Planungsrunde), dann OpenSCAD/`hardware/`.
   - Außerdem Stefan (GitHub-Settings): „Private vulnerability
     reporting" aktivieren, Repo-Beschreibung + Topics setzen.
