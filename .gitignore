@@ -1,0 +1,11 @@
+settings.toml
+.DS_Store
+__pycache__/
+Downloads/
+
+# Private Betriebsdaten (echte IPs/MACs) — niemals committen
+PRIVAT.md
+
+# Go-TUI: nicht mehr Teil des oeffentlichen Repos (Quellcode im
+# privaten Archiv-Branch intern/historie-2026-07); lokale Builds bleiben.
+tui/

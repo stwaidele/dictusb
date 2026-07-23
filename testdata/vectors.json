@@ -1,0 +1,126 @@
+{
+  "protocol": "DICTUSB2",
+  "comment": "Erzeugt von testdata/make_vectors.py — siehe PROTOCOL.md",
+  "cases": [
+    {
+      "name": "kurzes Token, ASCII",
+      "token": "geheim123",
+      "salt": "000102030405060708090a0b0c0d0e0f",
+      "banner": "DICTUSB2 000102030405060708090a0b0c0d0e0f\n",
+      "k_enc": "c1687813d6f5eaf18cb2eb665d9e0b4dc60641d926e73d9772ac939e3590bce6",
+      "k_mac": "1193dee141f8907f547a2085d060a3c1aea08df7b71a2e6543dbd91b9d1e81c0",
+      "k_ack": "fcdda1e5fcf4eb44f42bca28c5f52815f0a1371d8f66ad06821c04d7770cccfc",
+      "acks": [
+        "138b970ba003df3d",
+        "db0d9394b28bd0cf",
+        "3940170d4c8ba931"
+      ],
+      "frames": [
+        {
+          "seq": 0,
+          "plaintext": "61",
+          "ct": "77",
+          "mac": "69a75fb4fe5cb223",
+          "frame": "017769a75fb4fe5cb223"
+        },
+        {
+          "seq": 1,
+          "plaintext": "48616c6c6f2057656c74",
+          "ct": "30ef9e8e3ff2052b2600",
+          "mac": "f6a056ed11bdc9b1",
+          "frame": "0a30ef9e8e3ff2052b2600f6a056ed11bdc9b1"
+        }
+      ]
+    },
+    {
+      "name": "32-Hex-Token (Empfehlung), Umlaute und Kombi",
+      "token": "556501a4bb820675decb2c06e991c9cc",
+      "salt": "f0e1d2c3b4a5968778695a4b3c2d1e0f",
+      "banner": "DICTUSB2 f0e1d2c3b4a5968778695a4b3c2d1e0f\n",
+      "k_enc": "3dfbc0227f0ce5722dfc150bde33234a642711f8032c7abb04de5c9de6890d9b",
+      "k_mac": "459b1f92159b331045329b48b833ab8bdc571b86e6e7611ad477640cd6fe2eaa",
+      "k_ack": "fc12aa67b47e24b0336def1e54763516778cd37cbba531e4c985dfead137af4f",
+      "acks": [
+        "e35acd41324d53fd",
+        "9375e1ae0f62fec9",
+        "2cd50e0559b3426b"
+      ],
+      "frames": [
+        {
+          "seq": 0,
+          "plaintext": "c3a4c3b6c3bcc39f",
+          "ct": "4137e9d17794ae63",
+          "mac": "af49aef45595cc6f",
+          "frame": "084137e9d17794ae63af49aef45595cc6f"
+        },
+        {
+          "seq": 1,
+          "plaintext": "006374726c2b700a",
+          "ct": "d1ccecd33cf9e4cf",
+          "mac": "f9f4bb25055674c7",
+          "frame": "08d1ccecd33cf9e4cff9f4bb25055674c7"
+        },
+        {
+          "seq": 2,
+          "plaintext": "00",
+          "ct": "cf",
+          "mac": "a6f19e5d7c1b88d8",
+          "frame": "01cfa6f19e5d7c1b88d8"
+        }
+      ]
+    },
+    {
+      "name": "Token laenger als 64 Byte (wird vorher gehasht)",
+      "token": "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",
+      "salt": "aaaaaaaabbbbbbbbccccccccdddddddd",
+      "banner": "DICTUSB2 aaaaaaaabbbbbbbbccccccccdddddddd\n",
+      "k_enc": "505a5d22355154abf48f58abbf2d372d8b3994545d21a34aa3e480582fb510d7",
+      "k_mac": "b66c1f7355cbb18b6fbd7ff23cbd75a635b3ec5ba52e1021f7fa438045853597",
+      "k_ack": "2e27ee719eebaedba01e172755edd3f1dc801d2a1d57c59b66d6b5d4d7d50709",
+      "acks": [
+        "42780467557f4532",
+        "364a65f860e4a59c",
+        "126bd60e96045e87"
+      ],
+      "frames": [
+        {
+          "seq": 0,
+          "plaintext": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfe",
+          "ct": "5fea3a0a07eed5c524ca24d42ebf8a0d96f7cb44a2b64b22160dc9f70e8a29995cd9d3b34ce7bf6db15f5a61890f7893c760b386d1e2fa87fe1d088de8042e285fecaad6a1061d0d2a9db262a5cf84f00bb627c77ccc794ef634f2b7336cf459dd66119baefb25b3ad88e01c1e420ce86c8496a682d33462bb63d40ebcccda80c1691d0083dc35e1e7fac76987e7afa6b55d8e487ce5cf22cdf5b5efc90e0483306309b75fb87b551df1ef309ce068fa3e75a1d963b46ec8143d33169abcae9e904c558efa20901fe2defd6e452536b03ea38c0e2e3ef81346b5df9423bbad33e4531d7e2a514f2371d2785e41f1052d5936ab2acc685d231000598c303da0",
+          "mac": "13767fb46167a235",
+          "frame": "ff5fea3a0a07eed5c524ca24d42ebf8a0d96f7cb44a2b64b22160dc9f70e8a29995cd9d3b34ce7bf6db15f5a61890f7893c760b386d1e2fa87fe1d088de8042e285fecaad6a1061d0d2a9db262a5cf84f00bb627c77ccc794ef634f2b7336cf459dd66119baefb25b3ad88e01c1e420ce86c8496a682d33462bb63d40ebcccda80c1691d0083dc35e1e7fac76987e7afa6b55d8e487ce5cf22cdf5b5efc90e0483306309b75fb87b551df1ef309ce068fa3e75a1d963b46ec8143d33169abcae9e904c558efa20901fe2defd6e452536b03ea38c0e2e3ef81346b5df9423bbad33e4531d7e2a514f2371d2785e41f1052d5936ab2acc685d231000598c303da013767fb46167a235"
+        }
+      ]
+    },
+    {
+      "name": "Token mit Sonderzeichen und Umlaut",
+      "token": "pa$$wört mit Leerzeichen",
+      "salt": "0123456789abcdef0123456789abcdef",
+      "banner": "DICTUSB2 0123456789abcdef0123456789abcdef\n",
+      "k_enc": "63af31dc4275aaf351253a08a2a4bd046137f82c66ba7efd6e92cb236135a9ed",
+      "k_mac": "bfb9f8a6d9d24e4da670dc6587407765280239eaeedf1bbb461cb86ae9d9bee3",
+      "k_ack": "7b4f20e3ec39ed0265e841f7bb6da2f187c3c0c4f526d440dd51f49fcfcc5da4",
+      "acks": [
+        "b90b6041b8a93b30",
+        "90281a2ca790c40c",
+        "2a376960470b73e0"
+      ],
+      "frames": [
+        {
+          "seq": 0,
+          "plaintext": "ff00ff00",
+          "ct": "4fd9e9ba",
+          "mac": "9e0ef372cb7e1cff",
+          "frame": "044fd9e9ba9e0ef372cb7e1cff"
+        },
+        {
+          "seq": 1,
+          "plaintext": "7a",
+          "ct": "06",
+          "mac": "1bbba075f1c20abb",
+          "frame": "01061bbba075f1c20abb"
+        }
+      ]
+    }
+  ]
+}

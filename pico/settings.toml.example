@@ -1,0 +1,82 @@
+# Nach settings.toml kopieren und ausfüllen.
+# settings.toml ist in .gitignore — Zugangsdaten landen nie im Repo!
+
+# Bei jeder Änderung an der settings.toml hochzählen — code.py gibt die
+# Nummer beim Start aus, so sieht man, ob der Pico die neue Datei nutzt.
+DICTUSB_SETTINGS_VERSION = "1"
+
+# --- WLAN + Web-Workflow (empfohlen) ----------------------------------
+# Mit CIRCUITPY_WEB_API_PASSWORD verbindet CircuitPython das WLAN selbst
+# (vor code.py, bleibt über Soft-Reboots bestehen) und startet ein
+# Webinterface auf Port 80:
+#   http://<pico-ip>/fs/         Dateien ansehen/bearbeiten/hochladen
+#   http://<pico-ip>/cp/serial/  Logs + REPL im Browser
+# Login: Benutzername leer lassen, Passwort = CIRCUITPY_WEB_API_PASSWORD.
+CIRCUITPY_WIFI_SSID = "MeinWLAN"
+CIRCUITPY_WIFI_PASSWORD = "geheim"
+CIRCUITPY_WEB_API_PASSWORD = "webgeheim"
+
+# --- Alternative ohne Webinterface -------------------------------------
+# CIRCUITPY_-Zeilen oben entfernen und stattdessen diese setzen; dann
+# baut code.py die WLAN-Verbindung selbst auf.
+# DICTUSB_WIFI_SSID = "MeinWLAN"
+# DICTUSB_WIFI_PASSWORD = "geheim"
+
+# TCP-Port des dictUSB-Servers (Port 80 belegt der Web-Workflow)
+DICTUSB_PORT = 8080
+
+# Shared-Secret: Wenn gesetzt, laeuft der Tipp-Kanal verschluesselt
+# (Protokoll DICTUSB2); das Token selbst wird nie uebertragen.
+# Leer lassen ("") = Klartext, jeder im WLAN kann tippen.
+# Hochentropisch waehlen:
+#   python3 -c 'import os; print(os.urandom(16).hex())'
+DICTUSB_TOKEN = ""
+
+# --- Tastaturlayout des ZIELRECHNERS -----------------------------------
+# Wir senden HID-Keycodes; welches Zeichen daraus wird, entscheidet die
+# Tastaturbelegung des Rechners, an dem dieses Geraet steckt.
+#   "win_de"  Windows mit deutschem Layout (Standard) — passt auch fuer
+#             Linux mit deutschem Layout (gleiche Scancode-Belegung)
+#   "us"      US-Layout (Windows/Linux). ACHTUNG: kennt keine Umlaute;
+#             ae/oe/ue/ss werden protokolliert und verworfen.
+#   weitere:  win_fr, win_uk, win_es, win_it — nur nutzbar, wenn die
+#             passende .mpy aus dem Neradoc-Bundle in /lib liegt
+# Unbekannter oder fehlender Eintrag => hoerbarer Rueckfall auf "us",
+# die Bannerzeile "Layout = ..." beim Start zeigt das an.
+# macOS als Ziel wird derzeit NICHT unterstuetzt (siehe README).
+DICTUSB_LAYOUT = "win_de"
+
+# "1" = beim Start sichtbare Netze auflisten (nur Diagnose)
+DICTUSB_SCAN = "0"
+
+# --- Onboard-LED als Zustandsanzeige -----------------------------------
+# Zeigt: gelb = bereit, gruen = verbunden (heller je Tastendruck, dann
+# ueber 5 s ausblendend), rot blinkend = Abbruch. Der Code erkennt die
+# Hardware selbst: RGB-LED (z.B. ESP32-S3 NeoPixel) voll, einfarbige LED
+# (z.B. Pico 2 W) als Blinkmuster, ohne LED passiert nichts.
+# "0" schaltet die Anzeige ganz aus.
+DICTUSB_LED = "1"
+# Obergrenze der Helligkeit (0..1). WS2812 bei 1.0 sind sehr grell.
+DICTUSB_LED_BRIGHTNESS = "0.5"
+# Nur noetig, wenn die RGB-LED NICHT auf board.NEOPIXEL sitzt (Clone):
+# Name des board-Pins, z.B. "GPIO48". Leer = automatisch.
+# DICTUSB_LED_PIN = ""
+
+# Farben und Ausblendzeit (nur RGB-LED). Alle ueber /fs/ aenderbar,
+# ohne code.py neu zu bauen. Farbe als Hex "rrggbb" oder "r,g,b".
+# Ausblenden von der Aktivfarbe zurueck zur Verbindungsfarbe (Sekunden):
+DICTUSB_LED_FADE = "0.2"
+# DICTUSB_LED_READY = "ffff00"      # bereit (gelb)
+# DICTUSB_LED_CONNECTED = "00ff00"  # verbunden (gruen)
+# DICTUSB_LED_ACTIVITY = "00ffff"   # Tastendruck-Tupfer (cyan)
+# DICTUSB_LED_ABORT = "ff0000"      # Abbruch (rot)
+
+# "1" = CIRCUITPY-USB-Laufwerk aktiv lassen (Entwicklung am Kabel).
+# Standard aus: nur dann darf die Web-API Dateien schreiben, und der
+# PC sieht eine reine Tastatur. Wirkt erst nach hartem Reset.
+DICTUSB_USB_DRIVE = "0"
+
+# Nur für mac/deploy.sh (der Pico ignoriert den Eintrag): IP des Pico.
+# deploy.sh liest DICTUSB_HOST und CIRCUITPY_WEB_API_PASSWORD aus der
+# lokalen Kopie dieser Datei unter pico/settings.toml.
+DICTUSB_HOST = "192.168.0.123"

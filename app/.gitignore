@@ -1,0 +1,13 @@
+# Dart/Flutter Build- und Werkzeug-Artefakte
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# IDE
+*.iml
+.idea/
+.vscode/
+
+# pubspec.lock wird bewusst committet (app, nicht library)

@@ -1,0 +1,25 @@
+name: dictusb_app
+description: >-
+  dictUSB Sender-Client (Flutter). Sendet Text per WLAN/TCP mit
+  DICTUSB2-Verschluesselung an den Pico/ESP32, der ihn als USB-HID-Tastatur
+  am Zielrechner tippt. Ein Client fuer Desktop und Mobil.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.4.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  crypto: ^3.0.3
+  shared_preferences: ^2.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
