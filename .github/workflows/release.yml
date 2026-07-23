@@ -59,6 +59,9 @@ jobs:
           hdiutil create -volname dictUSB \
             -srcfolder app/build/macos/Build/Products/Release/dictUSB.app \
             -ov -format UDZO dictusb-app_macos.dmg
+      - name: DMG signieren
+        if: env.MACOS_CERT_P12 != ''
+        run: codesign --force --sign "Developer ID Application" dictusb-app_macos.dmg
       - name: Notarisieren + heften
         if: env.APPSTORE_PRIVATE_KEY != ''
         run: |
