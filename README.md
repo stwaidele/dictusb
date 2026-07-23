@@ -66,6 +66,11 @@ Jedes Release enthält eine `SHA256SUMS` zum Prüfen der Downloads
 - **Linux**: Archiv entpacken, `./dictusb_app` starten (GTK 3 muss
   installiert sein).
 
+<p>
+  <img src="docs/img/app-blockmodus.png" width="49%" alt="Blockmodus: Text eingeben, prüfen und als Ganzes senden">
+  <img src="docs/img/app-direktmodus.png" width="49%" alt="Direktmodus: jeder Tastendruck geht sofort an den Zielrechner">
+</p>
+
 Bedienung der App (Block-/Direktmodus, Diktat, Snippets,
 Modifier-Mapping): [`app/README.md`](app/README.md).
 

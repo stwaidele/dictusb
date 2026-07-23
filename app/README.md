@@ -52,6 +52,8 @@ landet im Feld; Direktmodus → Text geht direkt ans Gerät.
 
 ## Einstellungen (Zahnrad)
 
+<img src="../docs/img/app-einstellungen.png" width="60%" alt="Einstellungsdialog, Tab Direktmodus: Modifier-Mapping, Alt-Sonderzeichen, Umschalt-Taste">
+
 - **Modifier-Mapping**: drei Dropdowns — was control/option/command
   (macOS) bzw. Strg/Alt/Win (Windows/Linux) am Ziel bewirken
   (`Strg`/`Alt`/`Win`). macOS-Default ist der bewährte Tausch
