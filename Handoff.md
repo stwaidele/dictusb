@@ -316,6 +316,33 @@ cd app && flutter analyze && flutter test   # 18/18 (17 Vektoren + Widget)
 cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
 ```
 
+## Veröffentlichung (seit 2026-07-23, Phase 5)
+
+- **Öffentlich**: `github.com/stwaidele/dictusb` (MIT-Lizenz).
+  **Entwicklung bleibt primär auf Gitea** (`gitea.101010.cloud`).
+- **Ein `origin`, zwei Push-URLs** (Gitea + GitHub): jedes
+  `git push origin` (auch `--tags`) erreicht **beide** Remotes.
+  Zusätzlich Remote `github` zum Fetchen/Kontrollieren
+  (`git fetch github && git log main..github/main` muss leer sein).
+  SSH: Host-Alias `github-dictusb` (Deploy Key = fable-5-Key).
+- **Historie**: öffentlicher Frischstart (`6400fd9` „initial public
+  release"); die alte 74-Commit-Historie liegt **nur auf Gitea** im
+  privaten Branch `intern/historie-2026-07` (dort auch die Go-TUI).
+- **`PRIVAT.md`** (gitignored, Repo-Root): echte IPs/MACs und
+  Handgriffe mit echten Werten — niemals committen.
+- ⚠️ **GitHub-PRs nie über den Merge-Button mergen** (der Commit
+  entstünde nur auf GitHub): stattdessen `gh pr checkout`, lokal
+  mergen/testen, `git push origin main` — erreicht beide Remotes.
+- **Offen in Phase 5**: WP0 Apple-Developer-Einrichtung (Konto nie
+  genutzt) → WP3 Release-Pipeline (GitHub Actions, signiertes+
+  notarisiertes DMG, Zip, tar.gz; Tag `v1.0.0-rc1` als Probelauf) →
+  WP4 README-Ausbau (BOM mit Affiliate-Links `101010cloud-21`,
+  Screenshots, SECURITY.md) → Tag `v1.0.0` → WP6 Website
+  (werkzeugkasten.online/dictusb, Inhalt in `docs/website-content.md`
+  vorbereiten) → WP5 Gehäuse (**vorher separat besprechen**).
+  Plan-Details: Phase-5-Plandatei der Claude-Session (Pfad in
+  `PRIVAT.md`).
+
 ## Stolpersteine (ausführlich im README)
 
 1. **Kein USB-Host = kein Tipp-Server**: `Keyboard()` blockiert, bis ein
