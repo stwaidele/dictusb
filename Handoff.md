@@ -1,11 +1,12 @@
 # Handoff: dictUSB — Text live auf einen anderen Rechner tippen
 
 > Übergabedokument für die Fortsetzung in einer Claude-Code-Session.
-> Stand: 2026-07-23 — **läuft produktiv auf zwei Geräten** und ist
-> **öffentlich**: github.com/stwaidele/dictusb (MIT).
-> Zuletzt: Phase 5 (Veröffentlichung) größtenteils umgesetzt —
-> **nächste Schritte im Abschnitt „Veröffentlichung"** (rc2-Pipeline
-> prüfen, Screenshots, Apple-Einrichtung). Davor: Modifier-Tipp
+> Stand: 2026-07-23 (abends) — **läuft produktiv auf zwei Geräten**,
+> **öffentlich**: github.com/stwaidele/dictusb (MIT), und **v1.0.0 ist
+> getaggt** (Apple-Signierung/Notarisierung eingerichtet, mit rc4
+> verifiziert, App-Icon integriert; der v1.0.0-Pipeline-Lauf lief beim
+> Schreiben noch — **erster Schritt der nächsten Session: Ergebnis
+> prüfen**, Abschnitt „Veröffentlichung"). Davor: Modifier-Tipp
 > (Firmware 0.18), Flutter-Phasen 2–4, Quittungs-Fix (Firmware
 > quittiert NUR Lebenszeichen — siehe „Lebenszeichen-Quittungen").
 
@@ -69,8 +70,18 @@ Passwort = `CIRCUITPY_WEB_API_PASSWORD`):
   abgenommen.
 - **Linux-Ziel (Debian 13)** mit `DICTUSB_LAYOUT="win_de"`: voller
   Zeichensatz (`äöüß ÄÖÜ @/\-_ yz YZ 123 {[]}|~ €`) korrekt getippt —
-  auf der Textkonsole (TTY, nach `loadkeys de`) **und** unter X11
-  (Layout `de`, Variante `deadgraveacute`, Terminal + GUI-App).
+  auf der Textkonsole (TTY, nach `loadkeys de`), unter X11
+  (Layout `de`, Variante `deadgraveacute`, Terminal + GUI-App) **und
+  Wayland** (2026-07-23, Sender: Windows-App).
+- **Windows-Sender** (2026-07-23, Release-Zip aus rc4): App startet
+  nach SmartScreen-Warnung („Trotzdem ausführen" — Zip unsigniert,
+  bekannt/akzeptiert), verbindet und tippt an den Pico — **parallel**
+  zum Mac-Sender am ESP32 (zwei Sender, zwei Geräte gleichzeitig).
+- **Signiertes DMG** (v1.0.0-rc4): `spctl` „accepted,
+  source=Notarized Developer ID" für DMG **und** App darin,
+  Notarisierungs-Ticket angeheftet; Abnahme durch Stefan (die zwei
+  macOS-Dialoge beim Erstöffnen sind erwartet, siehe
+  „Veröffentlichung").
 
 ## Firmware (`pico/`, gilt für beide Geräte)
 
@@ -339,38 +350,68 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   überspringen sich selbst, solange die Apple-Secrets fehlen; `-rc` =
   Prerelease); WP4 README (Schnellstart, Downloads, Einkaufsliste mit
   Affiliate-Links `101010cloud-21`, Mitmachen) + SECURITY.md;
-  App-Version **1.0.0+1**, macOS-Bundle heißt jetzt **dictUSB.app**.
-  Probelauf `v1.0.0-rc1` schlug fehl (Linux-Plattform war nie
-  gescaffoldet — behoben), **`v1.0.0-rc2` lief beim Session-Ende noch**.
+  App-Version **1.0.0+1**, macOS-Bundle heißt **dictUSB.app**.
+  rc1 schlug fehl (Linux-Plattform fehlte — behoben), rc2 grün
+  (unsignierte Artefakte).
 
-- **Nächste Schritte (neue Session, in dieser Reihenfolge)**:
-  1. **rc2-Ergebnis prüfen**: `curl -s https://api.github.com/repos/`
-     `stwaidele/dictusb/actions/runs?per_page=1` (oder Actions-Tab).
-     Bei Grün: Prerelease v1.0.0-rc2 mit unsigniertem DMG/Zip/tar.gz
-     existiert; DMG/Zip stichprobenartig von Stefan öffnen lassen.
+- **WP0 Apple — erledigt (2026-07-23)**: Developer-ID-Zertifikat
+  „Stefan Waidele" (Team `ZDZ57JDWK4`, gültig bis 2027-02-01), per
+  Xcode erzeugt; P12 + Passwort + App-Store-Connect-API-Key liegen
+  unter `~/.config/dictusb/` (Mode 600, Details in `PRIVAT.md`;
+  P12 mit OpenSSL 3 nur via `-legacy` lesbar). **Fünf** GitHub-Secrets
+  gesetzt (`MACOS_CERT_P12` base64, `MACOS_CERT_PASSWORD`,
+  `APPSTORE_KEY_ID`, `APPSTORE_ISSUER_ID`, `APPSTORE_PRIVATE_KEY`) —
+  das früher geplante `APPLE_TEAM_ID` braucht der Workflow nicht.
+  Werkzeug: `gh` CLI (brew), angemeldet als `stwaidele`.
+  **Lehre aus rc3**: `hdiutil` erzeugt unsignierte DMGs — die App im
+  DMG war einwandfrei, aber `spctl` wies das DMG ab („no usable
+  signature"); seit `a8fcac0` signiert die Pipeline das DMG mit.
+  **rc4 voll verifiziert**: `spctl -a -vv` „accepted, source=Notarized
+  Developer ID" für DMG und App, `stapler validate` ok. Die zwei
+  macOS-Dialoge bei Stefans Abnahme sind **erwartet**: die normale
+  Erstöffnungs-Nachfrage (bekommt jede geladene App) und
+  „unterscheidet sich von zuvor verwendeten Versionen" (nur auf dem
+  Entwickler-Mac — Bundle-ID war dort schon mit Dev-Signatur gelaufen).
+  Windows: SmartScreen warnt erwartungsgemäß (Zip unsigniert,
+  „Trotzdem ausführen"); Windows-Signierung bewusst nicht geplant
+  (Zertifikat = laufende Kosten; Reputation wächst mit Downloads).
+
+- **App-Icon — erledigt (2026-07-23, `8da5334`)**: Entwurf von Stefan
+  (Claude Design): weißer USB-Dreizack, ein Zweig geht in Funkwellen
+  über, auf grüner Kachel. Quellen in `docs/img/`:
+  `dictusb-icon.svg` + `dictusb-icon-1024.png` (randlose Kachel,
+  Windows/Web) und `dictusb-icon-macos.svg` (abgerundete Kachel mit
+  Apple-Randabstand: 824er-Tile, rx 186, auf 1024er-Canvas).
+  Regenerieren: macOS-Iconset je Größe `rsvg-convert -w <s> -h <s>
+  docs/img/dictusb-icon-macos.svg -o app/macos/…/app_icon_<s>.png`
+  (16–1024); Windows `magick docs/img/dictusb-icon-1024.png -define
+  icon:auto-resize=256,128,64,48,32,16 app/windows/runner/resources/
+  app_icon.ico`. Icon ist oben im README eingebunden. **Falle**: Nach
+  Icon-Wechsel zeigt das Dock gecacht das alte — `touch` aufs Bundle +
+  `killall Dock` reicht.
+
+- **`v1.0.0` getaggt und freigegeben** (Stefan, 2026-07-23, nach
+  Icon-Abnahme im Dock). ⚠️ **Der Pipeline-Lauf lief beim Schreiben
+  dieses Stands noch** — Ergebnis prüfen!
+
+- **Nächste Schritte (in dieser Reihenfolge)**:
+  1. **v1.0.0-Lauf prüfen** (`gh run list -R stwaidele/dictusb`):
+     Release (kein Prerelease) mit DMG/Zip/tar.gz/SHA256SUMS; DMG
+     herunterladen und `xcrun stapler validate` + `spctl -a -vv -t
+     open --context context:primary-signature` → beide „accepted".
   2. **Screenshots** (`docs/img/`, dann im README einbinden):
      Screen-Recording-Freigabe fürs Terminal ist erteilt und nach dem
      Terminal-Neustart aktiv. Rezept: Release-App öffnen
      (`open app/build/macos/Build/Products/Release/dictUSB.app`),
      Geometrie per `osascript … System Events … position/size of
      window 1`, dann `screencapture -x -R<x,y,w,h>` — Block- und
-     Direktmodus + Einstellungsdialog.
-  3. **WP0 Apple**: Stefans Developer-Programm war am 2026-07-23
-     reaktiviert, aber im Portal **noch nicht aktiv** (Xcode zeigte nur
-     „Personal Team"). Sobald aktiv: Xcode → Settings → Accounts →
-     Manage Certificates → **Developer ID Application**; P12-Export +
-     App-Store-Connect-API-Key (.p8); sechs GitHub-Secrets
-     (`MACOS_CERT_P12` base64, `MACOS_CERT_PASSWORD`, `APPLE_TEAM_ID`,
-     `APPSTORE_KEY_ID`, `APPSTORE_ISSUER_ID`, `APPSTORE_PRIVATE_KEY`);
-     lokal `security find-identity -v -p codesigning` prüfen (Stand:
-     0 Identitäten). Dann rc-Tag → signiertes DMG, `spctl -a -vv`.
-  4. **Tag `v1.0.0`** → erstes echtes Release; Abnahme DMG (Mac) und
-     Zip (Windows, SmartScreen-Verhalten) durch Stefan.
-  5. **WP6 Website**: Inhalt in `docs/website-content.md` vorbereiten
+     Direktmodus + Einstellungsdialog. Jetzt mit neuem App-Icon.
+  3. **WP6 Website**: Inhalt in `docs/website-content.md` vorbereiten
      (Hero, Diagramm, Downloads→releases/latest, Hardware, Sicherheit,
      FAQ); Umsetzung als Unterseite werkzeugkasten.online/dictusb im
      separaten Werkzeugkasten-Workspace (sveltekit-tool-Konventionen).
-  6. **WP5 Gehäuse**: **erst separat mit Stefan besprechen** (eigene
+     Dort auch SmartScreen-/Gatekeeper-Hinweise für Nutzer erklären.
+  4. **WP5 Gehäuse**: **erst separat mit Stefan besprechen** (eigene
      Planungsrunde), dann OpenSCAD/`hardware/`.
   - Außerdem Stefan (GitHub-Settings): „Private vulnerability
     reporting" aktivieren, Repo-Beschreibung + Topics setzen.
@@ -423,8 +464,9 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   `us` gilt weiter als „sollte funktionieren" (Standard-Layout direkt aus
   `adafruit_hid`), aber **unbestätigt**. Für den nächsten Anlauf ein Ziel
   wählen, dessen US-Layout sich zuverlässig setzen lässt.
-- **Flutter-App auf Windows/Linux bauen und ausprobieren** (bisher nur
-  macOS live gelaufen; die Release-Pipeline baut alle drei).
+- **Flutter-App auf Linux ausprobieren** (macOS und Windows sind live
+  abgenommen — Windows am 2026-07-23 mit dem Release-Zip; das
+  Linux-tar.gz aus der Pipeline hat noch niemand gestartet).
 - **macOS als Ziel** (siehe Layout-Tabelle), Lösungswege im README.
 - Kosmetisch: `pico/` → `firmware/` umbenennen, da die Dateien für beide
   Geräte gelten (betrifft `deploy.sh`, READMEs).
