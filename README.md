@@ -1,5 +1,7 @@
 # dictUSB
 
+<img src="docs/img/dictusb-icon-1024.png" alt="dictUSB-Icon" width="120" align="right">
+
 > **English:** dictUSB types text live onto another computer. A
 > microcontroller (Raspberry Pi Pico 2 W or ESP32-S3) plugs into the
 > target machine via USB and acts as an ordinary HID keyboard; text is
