@@ -4,7 +4,7 @@ description: >-
   DICTUSB2-Verschluesselung an den Pico/ESP32, der ihn als USB-HID-Tastatur
   am Zielrechner tippt. Ein Client fuer Desktop und Mobil.
 publish_to: none
-version: 0.1.0
+version: 1.0.0+1
 
 environment:
   sdk: ^3.4.0

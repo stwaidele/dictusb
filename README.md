@@ -28,6 +28,60 @@ Tastaturbelegung, siehe „Zielsysteme und Layouts".
 | | Cmd↔Strg-Tausch global (`--tasten`): nur macOS, nur Python-Client |
 | **Empfangen** | Windows und Linux mit deutschem oder US-Layout; macOS offen |
 
+## Schnellstart
+
+1. **Kaufen**: einen Mikrocontroller aus der Einkaufsliste (unten).
+2. **Flashen**: CircuitPython + dictUSB-Firmware aufspielen
+   („Pico einrichten" bzw. `ESP32.md`) und in `settings.toml` WLAN +
+   Token eintragen.
+3. **Einstecken**: Mikrocontroller per USB an den Zielrechner — er
+   meldet sich dort als Tastatur und verbindet sich mit dem WLAN.
+4. **App laden** (Downloads unten), IP + Token eintragen, **Verbinden**.
+5. **Tippen oder diktieren** — der Text erscheint am Zielrechner.
+
+## Downloads
+
+Fertige Builds der dictUSB-App gibt es unter
+**<https://github.com/stwaidele/dictusb/releases/latest>**:
+
+| Datei | Für |
+|---|---|
+| `dictusb-app_macos.dmg` | macOS (signiert + notarisiert) |
+| `dictusb-app_windows_amd64.zip` | Windows 10/11 (64-bit) |
+| `dictusb-app_linux_amd64.tar.gz` | Linux (64-bit, braucht GTK 3) |
+
+Jedes Release enthält eine `SHA256SUMS` zum Prüfen der Downloads
+(`shasum -a 256 -c SHA256SUMS`).
+
+**Beim ersten Start:**
+
+- **macOS**: Das DMG ist signiert und notarisiert und startet ohne
+  Warnung. Falls macOS doch warnt (z. B. bei einem Prerelease):
+  Rechtsklick auf die App → „Öffnen".
+- **Windows**: SmartScreen kennt die unsignierte App nicht — „Weitere
+  Informationen" → „Trotzdem ausführen". Im Zweifel vorher die
+  Prüfsumme gegen `SHA256SUMS` vergleichen.
+- **Linux**: Archiv entpacken, `./dictusb_app` starten (GTK 3 muss
+  installiert sein).
+
+Bedienung der App (Block-/Direktmodus, Diktat, Snippets,
+Modifier-Mapping): [`app/README.md`](app/README.md).
+
+## Einkaufsliste
+
+Eines von beiden genügt (beide laufen mit identischer Firmware):
+
+| Teil | ca. | Link |
+|---|---|---|
+| **Raspberry Pi Pico 2 W** (RP2350, WLAN) | 8 € | [Amazon-Suche](https://www.amazon.de/s?k=raspberry+pi+pico+2+w&tag=101010cloud-21)* |
+| **ESP32-S3 DevKitC-1 „N16R8"** (16 MB Flash) | 10 € | [Amazon-Suche](https://www.amazon.de/s?k=esp32-s3+devkitc+n16r8&tag=101010cloud-21)* |
+| Dazu: **USB-Datenkabel** (Pico: Micro-USB, ESP32: USB-C — kein reines Ladekabel) | 5 € | [Amazon-Suche](https://www.amazon.de/s?k=micro+usb+datenkabel&tag=101010cloud-21)* |
+
+\* *Affiliate-Links (Werbung): Ein Kauf darüber unterstützt das
+Projekt und kostet dich nichts extra.* Die Boards gibt es genauso bei
+BerryBase, Reichelt & Co. — jedes DevKitC-1-Derivat mit nativem
+USB-Anschluss tut es (Details zum getesteten ESP32-Board: `ESP32.md`).
+
 ## Pico einrichten
 
 1. **CircuitPython flashen**: `.uf2` für „Raspberry Pi Pico 2 W" von
@@ -293,3 +347,14 @@ cyan), erwartet die LED eine andere Byte-Reihenfolge als GRB — dann in
   (`enter`, `tab`, `esc`, `delete`, `f1`–`f12`, `up/down/left/right`,
   `home`, `end`, `pageup`, `pagedown`, …) — siehe `send_combo()` in
   `pico/code.py`. Der `--tasten`-Modus nutzt genau dieses Protokoll.
+
+## Mitmachen
+
+- **Fragen und Fehler**: als Issue auf
+  <https://github.com/stwaidele/dictusb/issues>.
+- **Sicherheitslücken**: bitte vertraulich melden — siehe
+  [SECURITY.md](SECURITY.md).
+- **Pull Requests** sind willkommen; die Entwicklung läuft primär auf
+  einer privaten Gitea-Instanz, GitHub wird gespiegelt — PRs werden
+  daher lokal gemergt und tauchen als normale Commits auf.
+- Lizenz: [MIT](LICENSE).

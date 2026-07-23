@@ -1,0 +1,136 @@
+# Release-Pipeline: baut die dictUSB-App für macOS/Windows/Linux und
+# veröffentlicht sie als GitHub-Release, sobald ein Tag `v*` gepusht wird.
+# `-rc`-Tags werden als Prerelease markiert.
+#
+# Signierung/Notarisierung (macOS) laufen nur, wenn die Apple-Secrets
+# gesetzt sind — ohne sie entsteht ein unsigniertes DMG (für Probeläufe,
+# solange die Developer-Einrichtung aussteht).
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    env:
+      MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
+      MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+      APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+      APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+      APPSTORE_PRIVATE_KEY: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Build
+        working-directory: app
+        run: flutter build macos --release
+      - name: Zertifikat importieren
+        if: env.MACOS_CERT_P12 != ''
+        run: |
+          echo "$MACOS_CERT_P12" | base64 -d > cert.p12
+          security create-keychain -p "" build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p "" build.keychain
+          security import cert.p12 -k build.keychain \
+            -P "$MACOS_CERT_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: \
+            -s -k "" build.keychain
+          rm cert.p12
+      - name: Signieren (Developer ID, Hardened Runtime)
+        if: env.MACOS_CERT_P12 != ''
+        working-directory: app
+        run: |
+          codesign --force --deep --options runtime \
+            --entitlements macos/Runner/Release.entitlements \
+            --sign "Developer ID Application" \
+            build/macos/Build/Products/Release/dictUSB.app
+          codesign --verify --deep --strict \
+            build/macos/Build/Products/Release/dictUSB.app
+      - name: DMG bauen
+        run: |
+          hdiutil create -volname dictUSB \
+            -srcfolder app/build/macos/Build/Products/Release/dictUSB.app \
+            -ov -format UDZO dictusb-app_macos.dmg
+      - name: Notarisieren + heften
+        if: env.APPSTORE_PRIVATE_KEY != ''
+        run: |
+          echo "$APPSTORE_PRIVATE_KEY" > appstore_key.p8
+          xcrun notarytool submit dictusb-app_macos.dmg \
+            --key appstore_key.p8 --key-id "$APPSTORE_KEY_ID" \
+            --issuer "$APPSTORE_ISSUER_ID" --wait
+          xcrun stapler staple dictusb-app_macos.dmg
+          rm appstore_key.p8
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: dictusb-app_macos.dmg
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Build
+        working-directory: app
+        run: flutter build windows --release
+      - name: Zip
+        run: >
+          Compress-Archive
+          -Path app/build/windows/x64/runner/Release/*
+          -DestinationPath dictusb-app_windows_amd64.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: dictusb-app_windows_amd64.zip
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: GTK-Abhängigkeiten
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libgtk-3-dev
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Build
+        working-directory: app
+        run: flutter build linux --release
+      - name: Tarball
+        run: >
+          tar czf dictusb-app_linux_amd64.tar.gz
+          -C app/build/linux/x64/release/bundle .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: dictusb-app_linux_amd64.tar.gz
+
+  release:
+    needs: [macos, windows, linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: SHA256SUMS
+        working-directory: dist
+        run: sha256sum * > SHA256SUMS
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          prerelease: ${{ contains(github.ref_name, '-rc') }}
+          generate_release_notes: true
