@@ -84,3 +84,29 @@ Host/Port/Token aus der Verbindungsleiste.
 - Der macOS-**Tasten-Modus** des Python-Clients (globaler Event-Tap,
   wirkt in allen Apps) bleibt Python-only; der Direktmodus wirkt nur,
   solange das App-Fenster fokussiert ist.
+
+## Linux: Dock-Icon
+
+Der Runner setzt beim Start das Fenster-Icon aus dem Bundle
+(`data/app_icon.png`) — unter X11 zeigen Taskleiste/Dock damit direkt
+das dictUSB-Symbol. **Unter GNOME mit Wayland** nimmt das Dock das Icon
+dagegen aus einer installierten `.desktop`-Datei (Zuordnung über die
+App-ID `info.waidele.dictusb_app`); ohne sie erscheint ein
+Buchstaben-Platzhalter. Wer das Icon dort möchte, legt einmalig eine
+`.desktop`-Datei an:
+
+```sh
+APPDIR=/pfad/zum/entpackten/dictUSB   # absoluten Pfad eintragen
+cat > ~/.local/share/applications/info.waidele.dictusb_app.desktop <<EOF
+[Desktop Entry]
+Type=Application
+Name=dictUSB
+Exec=$APPDIR/dictusb_app
+Icon=$APPDIR/data/app_icon.png
+StartupWMClass=info.waidele.dictusb_app
+Categories=Utility;
+EOF
+```
+
+Danach startet die App auch aus der Aktivitäten-Übersicht; beim Start
+über die Kommandozeile ordnet GNOME das Fenster über die App-ID zu.

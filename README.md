@@ -64,7 +64,8 @@ Jedes Release enthält eine `SHA256SUMS` zum Prüfen der Downloads
   Informationen" → „Trotzdem ausführen". Im Zweifel vorher die
   Prüfsumme gegen `SHA256SUMS` vergleichen.
 - **Linux**: Archiv entpacken (legt ein Verzeichnis `dictUSB/` an),
-  `./dictUSB/dictusb_app` starten (GTK 3 muss installiert sein).
+  `./dictUSB/dictusb_app` starten (GTK 3 muss installiert sein). Für
+  ein Dock-Icon unter GNOME/Wayland siehe `app/README.md`.
 
 <p>
   <img src="docs/img/app-blockmodus.png" width="49%" alt="Blockmodus: Text eingeben, prüfen und als Ganzes senden">

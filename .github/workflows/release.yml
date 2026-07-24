@@ -88,10 +88,10 @@ jobs:
         working-directory: app
         run: flutter build windows --release
       - name: Zip
-        run: >
-          Compress-Archive
-          -Path app/build/windows/x64/runner/Release/*
-          -DestinationPath dictusb-app_windows_amd64.zip
+        # Top-Level-Verzeichnis dictUSB/ statt flacher Struktur
+        run: |
+          Move-Item app/build/windows/x64/runner/Release dictUSB
+          Compress-Archive -Path dictUSB -DestinationPath dictusb-app_windows_amd64.zip
       - uses: actions/upload-artifact@v4
         with:
           name: windows

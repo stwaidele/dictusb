@@ -467,12 +467,19 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   `us` gilt weiter als „sollte funktionieren" (Standard-Layout direkt aus
   `adafruit_hid`), aber **unbestätigt**. Für den nächsten Anlauf ein Ziel
   wählen, dessen US-Layout sich zuverlässig setzen lässt.
-- **Flutter-App auf Linux ausprobieren** (macOS und Windows sind live
-  abgenommen — Windows am 2026-07-23 mit dem Release-Zip; das
-  Linux-tar.gz aus der Pipeline hat noch niemand gestartet).
-  Seit 2026-07-24 packt die Pipeline das tar.gz mit Top-Level-Verzeichnis
-  `dictUSB/` (vorher Tarbomb); das v1.0.0-Asset hat noch die alte
-  Struktur — Fix greift ab dem nächsten Release-Tag.
+- **Linux-App: abgenommen** (2026-07-24, Stefan): Verbindung zu Pico
+  **und** ESP32 funktioniert. Dabei gefunden: Dock zeigte nur einen
+  Buchstaben-Platzhalter („W auf gelb") — Fix am selben Tag: Runner
+  setzt jetzt das Fenster-Icon (`data/app_icon.png` kommt per
+  CMake-Install-Regel ins Bundle), Fenstertitel „dictUSB" statt
+  „dictusb_app"; unter GNOME/Wayland braucht das Dock-Icon zusätzlich
+  eine `.desktop`-Datei (Anleitung in `app/README.md`). **Der
+  Icon-Fix ist noch ungetestet** (kein Linux-Build auf dem Mac) —
+  beim nächsten Release/Build auf Linux prüfen.
+- **Archiv-Struktur seit 2026-07-24**: tar.gz **und** Windows-Zip
+  packen ein Top-Level-Verzeichnis `dictUSB/` (vorher Tarbomb bzw.
+  flaches Zip); die v1.0.0-Assets haben noch die alte Struktur — Fix
+  greift ab dem nächsten Release-Tag.
 - **macOS als Ziel** (siehe Layout-Tabelle), Lösungswege im README.
 - Latenz im Alltag beobachten; `DICTUSB_SCAN`-Hänger mit neuerer
   CircuitPython-Version erneut testen.
