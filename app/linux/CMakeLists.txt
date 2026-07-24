@@ -127,6 +127,11 @@ install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../../docs/img/dictusb-icon-1024.png"
   DESTINATION "${INSTALL_BUNDLE_DATA_DIR}" RENAME "app_icon.png"
   COMPONENT Runtime)
 
+# Starter-Script: legt den .desktop-Eintrag an (Dock-Icon unter
+# GNOME/Wayland) und startet dann dictusb_app.
+install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/dictUSB"
+  DESTINATION "${CMAKE_INSTALL_PREFIX}" COMPONENT Runtime)
+
 # Install the AOT library on non-Debug builds only.
 if(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
   install(FILES "${AOT_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"

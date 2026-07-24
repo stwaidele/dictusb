@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# dictUSB-Starter (Linux): sorgt vor dem App-Start dafür, dass der
+# .desktop-Eintrag existiert und auf den aktuellen Entpack-Ort zeigt —
+# nur darüber zeigt das Dock unter GNOME/Wayland das App-Icon (Zuordnung
+# über die App-ID info.waidele.dictusb_app). Wird der Ordner verschoben,
+# schreibt der nächste Start den Eintrag automatisch neu.
+set -u
+
+APPDIR="$(dirname "$(readlink -f "$0")")"
+DESKTOP_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+DESKTOP_FILE="$DESKTOP_DIR/info.waidele.dictusb_app.desktop"
+
+DESIRED="[Desktop Entry]
+Type=Application
+Name=dictUSB
+Exec=\"$APPDIR/dictUSB\"
+Icon=$APPDIR/data/app_icon.png
+StartupWMClass=info.waidele.dictusb_app
+Categories=Utility;"
+
+if [ ! -f "$DESKTOP_FILE" ] || [ "$(cat "$DESKTOP_FILE")" != "$DESIRED" ]; then
+  if ! { mkdir -p "$DESKTOP_DIR" && printf '%s\n' "$DESIRED" >"$DESKTOP_FILE"; }; then
+    echo "dictUSB: Konnte $DESKTOP_FILE nicht anlegen — App startet trotzdem, nur das Dock-Icon fehlt ggf." >&2
+  fi
+fi
+
+exec "$APPDIR/dictusb_app" "$@"

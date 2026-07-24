@@ -401,7 +401,18 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   Pipeline grün (alle 4 Jobs); geprüft: tar.gz und Zip enthalten
   `dictUSB/` (inkl. `data/app_icon.png`), SHA256 ok, DMG `spctl`
   „accepted, source=Notarized Developer ID" + `stapler validate` ok.
-  Offen bleibt nur der Sichttest des Linux-Dock-Icons.
+  **Dock-Icon von Stefan bestätigt** (2026-07-24, via manuell
+  angelegter `.desktop`-Datei).
+
+- **Linux-Starter-Script `dictUSB`** (seit 2026-07-24, im Repo —
+  landet mit dem nächsten Release im tar.gz): `app/linux/dictUSB`,
+  per CMake-`install(PROGRAMS …)` ins Bundle-Root. Legt vor dem Start
+  den `.desktop`-Eintrag an bzw. schreibt ihn neu, wenn der Ordner
+  verschoben wurde (Vergleich Soll/Ist-Inhalt), dann `exec
+  dictusb_app`. Einstieg für Nutzer ist jetzt `./dictUSB/dictUSB`
+  (READMEs angepasst). Auf dem Mac per Dummy-Bundle getestet
+  (Leerzeichen-Pfade, Idempotenz, Verschieben, Argument-Durchreichung);
+  echter Linux-Lauf steht mit dem nächsten Release-Test aus.
 
 - **Screenshots — erledigt (2026-07-23, `3af36c5`)**: `docs/img/
   app-blockmodus.png` + `app-direktmodus.png` (README „Downloads")
@@ -481,9 +492,9 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   setzt jetzt das Fenster-Icon (`data/app_icon.png` kommt per
   CMake-Install-Regel ins Bundle), Fenstertitel „dictUSB" statt
   „dictusb_app"; unter GNOME/Wayland braucht das Dock-Icon zusätzlich
-  eine `.desktop`-Datei (Anleitung in `app/README.md`). **Der
-  Icon-Fix ist noch ungetestet** (kein Linux-Build auf dem Mac) —
-  beim nächsten Release/Build auf Linux prüfen.
+  eine `.desktop`-Datei — seit 2026-07-24 legt das Starter-Script
+  `dictUSB` sie automatisch an (siehe „Veröffentlichung"). **Dock-Icon
+  von Stefan auf Debian 13 bestätigt.**
 - **Archiv-Struktur seit v1.0.1**: tar.gz **und** Windows-Zip packen
   ein Top-Level-Verzeichnis `dictUSB/` (vorher Tarbomb bzw. flaches
   Zip); nur die alten v1.0.0-Assets haben noch die flache Struktur.

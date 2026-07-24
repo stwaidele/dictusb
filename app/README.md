@@ -85,29 +85,24 @@ Host/Port/Token aus der Verbindungsleiste.
   wirkt in allen Apps) bleibt Python-only; der Direktmodus wirkt nur,
   solange das App-Fenster fokussiert ist.
 
-## Linux: Dock-Icon
+## Linux: Starter-Script und Dock-Icon
 
-Der Runner setzt beim Start das Fenster-Icon aus dem Bundle
-(`data/app_icon.png`) — unter X11 zeigen Taskleiste/Dock damit direkt
-das dictUSB-Symbol. **Unter GNOME mit Wayland** nimmt das Dock das Icon
-dagegen aus einer installierten `.desktop`-Datei (Zuordnung über die
-App-ID `info.waidele.dictusb_app`); ohne sie erscheint ein
-Buchstaben-Platzhalter. Wer das Icon dort möchte, legt einmalig eine
-`.desktop`-Datei an:
+Die App startet man über das mitgelieferte Script **`dictUSB`** (statt
+`dictusb_app` direkt). Es prüft vor jedem Start, ob der
+`.desktop`-Eintrag unter
+`~/.local/share/applications/info.waidele.dictusb_app.desktop`
+existiert und auf den aktuellen Entpack-Ort zeigt, legt ihn bei Bedarf
+(neu) an — auch nach dem Verschieben des Ordners — und startet dann
+`dictusb_app`.
 
-```sh
-APPDIR=/pfad/zum/entpackten/dictUSB   # absoluten Pfad eintragen
-mkdir -p ~/.local/share/applications  # fehlt auf frischen Systemen
-cat > ~/.local/share/applications/info.waidele.dictusb_app.desktop <<EOF
-[Desktop Entry]
-Type=Application
-Name=dictUSB
-Exec=$APPDIR/dictusb_app
-Icon=$APPDIR/data/app_icon.png
-StartupWMClass=info.waidele.dictusb_app
-Categories=Utility;
-EOF
-```
+Hintergrund: Der Runner setzt zwar das Fenster-Icon aus dem Bundle
+(`data/app_icon.png`), was unter X11 für Taskleiste/Dock reicht.
+**Unter GNOME mit Wayland** nimmt das Dock das Icon aber nur aus einer
+installierten `.desktop`-Datei (Zuordnung über die App-ID
+`info.waidele.dictusb_app`); ohne sie erscheint ein
+Buchstaben-Platzhalter. Mit dem Eintrag startet die App außerdem aus
+der Aktivitäten-Übersicht.
 
-Danach startet die App auch aus der Aktivitäten-Übersicht; beim Start
-über die Kommandozeile ordnet GNOME das Fenster über die App-ID zu.
+Wer den Eintrag nicht möchte: `dictusb_app` direkt starten und die
+Datei ggf. wieder löschen
+(`rm ~/.local/share/applications/info.waidele.dictusb_app.desktop`).
