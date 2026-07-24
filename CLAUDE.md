@@ -29,10 +29,10 @@ Mac --(WLAN, TCP-Socket)--> Pico 2 W --(USB-HID)--> Windows-PC
 
 ### Komponenten
 
-- `pico/boot.py` — reduziert USB-HID auf reine Tastatur
-- `pico/code.py` — WLAN-Verbindung, TCP-Server (`socketpool`), HID-Tippen,
+- `firmware/boot.py` — reduziert USB-HID auf reine Tastatur
+- `firmware/code.py` — WLAN-Verbindung, TCP-Server (`socketpool`), HID-Tippen,
   Token-Check, WLAN-Reconnect, UTF-8-Stream-Dekodierung
-- `pico/settings.toml.example` — Vorlage; echte `settings.toml` mit
+- `firmware/settings.toml.example` — Vorlage; echte `settings.toml` mit
   WLAN-Zugangsdaten ist in `.gitignore` (niemals committen)
 - `mac/dictusb.py` — Client: interaktiv (raw mode, Zeichen einzeln,
   TCP_NODELAY, Ende mit Ctrl-]) oder Pipe-Modus (`echo … | dictusb.py`)

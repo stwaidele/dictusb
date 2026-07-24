@@ -1,7 +1,7 @@
 /// DICTUSB2-Protokoll (Client-Seite) in Dart.
 ///
 /// Maßgeblich ist `PROTOCOL.md` im Repo-Wurzelverzeichnis; die Referenz
-/// ist `pico/dictusb_crypto.py`. Testvektoren (der verbindliche
+/// ist `firmware/dictusb_crypto.py`. Testvektoren (der verbindliche
 /// Kompatibilitätsvertrag): `testdata/vectors.json`.
 ///
 /// Reine HMAC-SHA256-Konstruktion, keine weiteren Krypto-Abhängigkeiten.

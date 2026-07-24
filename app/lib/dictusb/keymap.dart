@@ -163,7 +163,7 @@ final Set<LogicalKeyboardKey> _modifierKeys = {
 };
 
 /// Benannte Tasten mit exakt den Namen, die die Firmware kennt
-/// (NAMED_KEYS in pico/code.py).
+/// (NAMED_KEYS in firmware/code.py).
 final Map<LogicalKeyboardKey, String> _namedKeys = {
   LogicalKeyboardKey.enter: 'enter',
   LogicalKeyboardKey.numpadEnter: 'enter',

@@ -119,7 +119,7 @@ USB-Anschluss tut es (Details zum getesteten ESP32-Board: `ESP32.md`).
    - `keyboard_layout_win_de.mpy` und `keycode_win_de.mpy` aus dem
      [Neradoc-Layout-Bundle](https://github.com/Neradoc/Circuitpython_Keyboard_Layouts/releases)
      (deutsches Windows-Layout; ohne sie fällt der Code auf US zurück)
-3. **Dateien aus `pico/` auf `CIRCUITPY/` kopieren**: `boot.py`, `code.py`,
+3. **Dateien aus `firmware/` auf `CIRCUITPY/` kopieren**: `boot.py`, `code.py`,
    und `settings.toml.example` als `settings.toml` — dort SSID, Passwort
    und optional `DICTUSB_TOKEN` eintragen.
 4. Pico aus- und am **Windows-PC** einstecken. Windows erkennt eine
@@ -204,12 +204,12 @@ Zum Hochladen aus dem Repo gibt es `mac/deploy.sh` (nutzt die
 Web-Workflow-API per HTTP PUT):
 
 ```sh
-./mac/deploy.sh                   # lädt pico/code.py hoch
-./mac/deploy.sh pico/boot.py      # beliebige Dateien
+./mac/deploy.sh                   # lädt firmware/code.py hoch
+./mac/deploy.sh firmware/boot.py      # beliebige Dateien
 ```
 
 Host und Passwort liest das Skript aus der lokalen (gitignorten) Kopie
-`pico/settings.toml` (`DICTUSB_HOST`, `CIRCUITPY_WEB_API_PASSWORD`);
+`firmware/settings.toml` (`DICTUSB_HOST`, `CIRCUITPY_WEB_API_PASSWORD`);
 die Umgebungsvariablen `DICTUSB_HOST`/`DICTUSB_WEB_PASSWORD` haben
 Vorrang.
 
@@ -327,7 +327,7 @@ cyan), erwartet die LED eine andere Byte-Reihenfolge als GRB — dann in
 - **Sicherheit/Verschlüsselung**: Sobald `DICTUSB_TOKEN` gesetzt ist,
   läuft der Tipp-Kanal verschlüsselt und integritätsgeschützt
   (Protokoll **DICTUSB2**, Details im Docstring von
-  `pico/dictusb_crypto.py`): Der Pico sendet pro Verbindung ein
+  `firmware/dictusb_crypto.py`): Der Pico sendet pro Verbindung ein
   frisches Salt, beide Seiten leiten daraus per HMAC-SHA256
   Session-Schlüssel ab, Daten laufen als MAC-geschützte Frames
   (Keystream: HMAC als PRF im CTR-Modus). Das Token selbst wird nie
@@ -353,7 +353,7 @@ cyan), erwartet die LED eine andere Byte-Reihenfolge als GRB — dann in
   `shift`, `win`; Taste: einzelnes Zeichen (layoutkorrekt) oder Name
   (`enter`, `tab`, `esc`, `delete`, `f1`–`f12`, `up/down/left/right`,
   `home`, `end`, `pageup`, `pagedown`, …) — siehe `send_combo()` in
-  `pico/code.py`. Der `--tasten`-Modus nutzt genau dieses Protokoll.
+  `firmware/code.py`. Der `--tasten`-Modus nutzt genau dieses Protokoll.
 
 ## Mitmachen
 

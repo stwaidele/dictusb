@@ -4,9 +4,9 @@
 # Der Upload löst auf dem Pico den Auto-Reload aus.
 #
 # Aufruf:  ./mac/deploy.sh                     # code.py + dictusb_crypto.py
-#          ./mac/deploy.sh pico/boot.py …      # beliebige Dateien
+#          ./mac/deploy.sh firmware/boot.py …      # beliebige Dateien
 #
-# Zugangsdaten kommen aus der lokalen Kopie pico/settings.toml
+# Zugangsdaten kommen aus der lokalen Kopie firmware/settings.toml
 # (gitignored; gleicher Inhalt wie auf dem Pico):
 #   CIRCUITPY_WEB_API_PASSWORD  Web-API-Passwort
 #   DICTUSB_HOST                IP/Hostname des Pico (optional)
@@ -14,7 +14,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-SETTINGS="pico/settings.toml"
+SETTINGS="firmware/settings.toml"
 
 # Liest einen String-Wert ('KEY = "wert"') aus der settings.toml
 get_toml() {
@@ -61,7 +61,7 @@ fi
 # code.py IMMER zuletzt: jeder Upload loest den Auto-Reload aus, und die
 # neue code.py darf erst starten, wenn ihre Abhaengigkeiten schon da sind.
 files=("$@")
-[ ${#files[@]} -eq 0 ] && files=(pico/dictusb_crypto.py pico/status_led.py pico/code.py)
+[ ${#files[@]} -eq 0 ] && files=(firmware/dictusb_crypto.py firmware/status_led.py firmware/code.py)
 
 for f in "${files[@]}"; do
     name=$(basename "$f")

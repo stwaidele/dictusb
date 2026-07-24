@@ -5,9 +5,9 @@ Interaktiv (Terminal):  jeder Tastendruck geht sofort raus (geringe Latenz).
 Pipe-Modus:             echo "Hallo" | ./dictusb.py <host>   tippt den Text.
 
 Mit Token laeuft die Verbindung verschluesselt (Protokoll DICTUSB2,
-siehe pico/dictusb_crypto.py); das Token wird nie uebertragen. Ohne
+siehe firmware/dictusb_crypto.py); das Token wird nie uebertragen. Ohne
 --token wird es aus der Umgebungsvariable DICTUSB_TOKEN oder der
-lokalen pico/settings.toml gelesen. Ohne Token: Klartext (nur fuer
+lokalen firmware/settings.toml gelesen. Ohne Token: Klartext (nur fuer
 tokenlosen Testbetrieb).
 
 Beenden (interaktiv wie --tasten): 5x die LINKE Shift-Taste innerhalb
@@ -34,9 +34,9 @@ import socket
 import sys
 import time
 
-# Geteilte Krypto-Schicht aus pico/ (dieselbe Datei laeuft auf dem Pico)
+# Geteilte Krypto-Schicht aus firmware/ (dieselbe Datei laeuft auf dem Pico)
 sys.path.insert(
-    0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "pico")
+    0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "firmware")
 )
 try:
     import dictusb_crypto
@@ -48,12 +48,12 @@ QUIT_KEY = b"\x1d"  # Ctrl-] (Fallback; nur tippbar, wo ] direkt liegt)
 
 def read_local_token():
     """Token aus DICTUSB_TOKEN (Env) oder der lokalen, gitignorten
-    pico/settings.toml — haelt das Secret aus der Shell-History raus."""
+    firmware/settings.toml — haelt das Secret aus der Shell-History raus."""
     tok = os.environ.get("DICTUSB_TOKEN")
     if tok:
         return tok
     settings = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "..", "pico", "settings.toml"
+        os.path.dirname(os.path.abspath(__file__)), "..", "firmware", "settings.toml"
     )
     try:
         with open(settings) as f:
@@ -172,14 +172,14 @@ def connect(host, port, token):
             raise OSError(
                 "der Pico erwartet Verschlüsselung (DICTUSB2), aber es ist "
                 "kein Token konfiguriert — --token angeben oder "
-                "DICTUSB_TOKEN in Env/pico/settings.toml setzen"
+                "DICTUSB_TOKEN in Env/firmware/settings.toml setzen"
             )
         sock.settimeout(None)
         return CryptoSocket(sock)
     if dictusb_crypto is None:
         raise OSError(
             "dictusb_crypto.py nicht gefunden (gehoert neben dieses Skript "
-            "ins Repo unter pico/) — ohne sie kein Token-Betrieb"
+            "ins Repo unter firmware/) — ohne sie kein Token-Betrieb"
         )
     # Mit Token ist das DICTUSB2-Banner Pflicht. Es gibt bewusst KEINEN
     # Klartext-Fallback: ein schweigender/alter Server koennte sonst das
@@ -299,7 +299,7 @@ def run_interactive(sock, echo=True):
 def run_capture(sock, echo=True):
     """Tasten-Modus: Event-Tap statt stdin. Tauscht Cmd<->Strg (Cmd wird
     zu Strg, Strg zu Win) und schickt Kombinationen als Escape-Sequenz
-    "\\x00<spec>\\n" an den Pico (siehe send_combo in pico/code.py)."""
+    "\\x00<spec>\\n" an den Pico (siehe send_combo in firmware/code.py)."""
     try:
         from pynput import keyboard
     except ImportError:
@@ -456,7 +456,7 @@ def main():
         "--token",
         default="",
         help="Shared-Secret (DICTUSB_TOKEN); ohne Angabe aus der "
-        "Umgebungsvariable DICTUSB_TOKEN oder pico/settings.toml gelesen",
+        "Umgebungsvariable DICTUSB_TOKEN oder firmware/settings.toml gelesen",
     )
     parser.add_argument(
         "--no-echo",

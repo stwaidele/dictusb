@@ -82,7 +82,7 @@ Passwort = `CIRCUITPY_WEB_API_PASSWORD`):
   macOS-Dialoge beim Erstöffnen sind erwartet, siehe
   „Veröffentlichung").
 
-## Firmware (`pico/`, gilt für beide Geräte)
+## Firmware (`firmware/`, gilt für beide Geräte)
 
 CircuitPython **10.2.1**. In `/lib`: `adafruit_hid` +
 `keyboard_layout_win_de`/`keycode_win_de` (Neradoc-Bundle, 10.x-mpy).
@@ -127,8 +127,8 @@ Testvektoren in `testdata/vectors.json` (`make_vectors.py --check`).
 
 **Token rotieren**: neues per
 `python3 -c 'import os; print(os.urandom(16).hex())'` in die lokale
-`pico/settings.toml`, `DICTUSB_SETTINGS_VERSION` hochzählen, dann
-`DICTUSB_HOST=<ip> ./mac/deploy.sh pico/settings.toml` je Gerät.
+`firmware/settings.toml`, `DICTUSB_SETTINGS_VERSION` hochzählen, dann
+`DICTUSB_HOST=<ip> ./mac/deploy.sh firmware/settings.toml` je Gerät.
 **Beide Kopien müssen identisch sein**, sonst trennt das Gerät nach 5 s.
 
 ### Lebenszeichen statt Timeout (seit 0.15)
@@ -169,7 +169,7 @@ Startzeile `Layout = …` zeigt die aktive Belegung.
   Cmd↔Strg-Tausch) — braucht `pynput` und die macOS-Freigabe
   **Bedienungshilfen**. Ausstieg beider Modi: 5× linke Shift in 2 s.
   Liest das Token ohne `--token` aus `DICTUSB_TOKEN` (Env) oder der
-  lokalen `pico/settings.toml`. In `mac/` liegt auch `deploy.sh`
+  lokalen `firmware/settings.toml`. In `mac/` liegt auch `deploy.sh`
   (Firmware-Rollout über die Web-API).
 - **Go-TUI (archiviert, 2026-07-23):** war der erste
   plattformübergreifende Client (Bubble Tea v2); mit der Flutter-App
@@ -317,7 +317,8 @@ sie je reaktiviert wird, gleiche Regel portieren.
 - Offene Grundsatzentscheidungen: Zeichen- vs. Tastenmodell;
   Go-TUI/Python ablösen (Stefan ist dazu bereit, wenn Flutter sich
   bewährt — dann auch den latenten Quittungs-Fehler der TUI bedenken).
-  `app/` ggf. später umbenennen (analog `pico/`→`firmware/`).
+  `app/` ggf. später umbenennen (analog zur 2026-07-24 erledigten
+  Umbenennung `pico/`→`firmware/`).
 
 ### Verifikation (Krypto ohne Netz, ich-selbst-fähig)
 
@@ -470,8 +471,6 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   abgenommen — Windows am 2026-07-23 mit dem Release-Zip; das
   Linux-tar.gz aus der Pipeline hat noch niemand gestartet).
 - **macOS als Ziel** (siehe Layout-Tabelle), Lösungswege im README.
-- Kosmetisch: `pico/` → `firmware/` umbenennen, da die Dateien für beide
-  Geräte gelten (betrifft `deploy.sh`, READMEs).
 - Latenz im Alltag beobachten; `DICTUSB_SCAN`-Hänger mit neuerer
   CircuitPython-Version erneut testen.
 
@@ -529,6 +528,6 @@ DICTUSB_HOST=192.168.0.51 ./mac/deploy.sh   # ESP32
 open http://192.168.0.50/cp/serial/
 
 # Alles prüfen
-python3 -m py_compile pico/*.py && ./testdata/make_vectors.py --check
+python3 -m py_compile firmware/*.py && ./testdata/make_vectors.py --check
 cd app && flutter analyze && flutter test
 ```

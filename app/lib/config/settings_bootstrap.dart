@@ -1,4 +1,4 @@
-/// Best-effort-Vorbelegung der Verbindungsfelder aus `pico/settings.toml`
+/// Best-effort-Vorbelegung der Verbindungsfelder aus `firmware/settings.toml`
 /// (nur Desktop, wenn die Datei im Repo neben der App liegt). Eine echte
 /// persistente Konfiguration kommt in einer späteren Phase; auf Mobil gibt
 /// es die Datei nicht → leere Vorgabe, Nutzer trägt selbst ein.
@@ -18,9 +18,9 @@ Bootstrap loadBootstrap() {
     return const Bootstrap();
   }
   const candidates = [
-    '../pico/settings.toml',
-    'pico/settings.toml',
-    '../../pico/settings.toml',
+    '../firmware/settings.toml',
+    'firmware/settings.toml',
+    '../../firmware/settings.toml',
   ];
   for (final p in candidates) {
     final f = File(p);

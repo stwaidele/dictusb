@@ -78,5 +78,5 @@ DICTUSB_USB_DRIVE = "0"
 
 # Nur für mac/deploy.sh (der Pico ignoriert den Eintrag): IP des Pico.
 # deploy.sh liest DICTUSB_HOST und CIRCUITPY_WEB_API_PASSWORD aus der
-# lokalen Kopie dieser Datei unter pico/settings.toml.
+# lokalen Kopie dieser Datei unter firmware/settings.toml.
 DICTUSB_HOST = "192.168.0.123"

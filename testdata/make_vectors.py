@@ -15,7 +15,7 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "pico"))
+sys.path.insert(0, os.path.join(HERE, "..", "firmware"))
 
 import dictusb_crypto as dc  # noqa: E402
 

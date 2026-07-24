@@ -8,7 +8,7 @@
 ///   cd app && dart run bin/probe.dart [host]
 ///
 /// Host/Port/Token: Argument bzw. Umgebungsvariablen DICTUSB_HOST/_PORT/
-/// _TOKEN, sonst aus `pico/settings.toml`, Host-Default 192.168.0.50.
+/// _TOKEN, sonst aus `firmware/settings.toml`, Host-Default 192.168.0.50.
 library;
 
 import 'dart:io';
@@ -79,9 +79,9 @@ Future<void> main(List<String> args) async {
 
 Map<String, String> _readSettings() {
   const candidates = [
-    '../pico/settings.toml',
-    'pico/settings.toml',
-    '../../pico/settings.toml',
+    '../firmware/settings.toml',
+    'firmware/settings.toml',
+    '../../firmware/settings.toml',
   ];
   for (final p in candidates) {
     final f = File(p);

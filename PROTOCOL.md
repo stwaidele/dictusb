@@ -1,7 +1,7 @@
 # DICTUSB2 — Wire-Protokoll
 
 Sprachneutrale Spezifikation des verschlüsselten dictUSB-Kanals.
-Referenz-Implementierung: `pico/dictusb_crypto.py` (läuft auf CPython
+Referenz-Implementierung: `firmware/dictusb_crypto.py` (läuft auf CPython
 und CircuitPython). Testvektoren: `testdata/vectors.json`.
 
 Wer eine neue Implementierung schreibt (Go, C, JavaScript …), muss
