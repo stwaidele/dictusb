@@ -470,6 +470,9 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
 - **Flutter-App auf Linux ausprobieren** (macOS und Windows sind live
   abgenommen — Windows am 2026-07-23 mit dem Release-Zip; das
   Linux-tar.gz aus der Pipeline hat noch niemand gestartet).
+  Seit 2026-07-24 packt die Pipeline das tar.gz mit Top-Level-Verzeichnis
+  `dictUSB/` (vorher Tarbomb); das v1.0.0-Asset hat noch die alte
+  Struktur — Fix greift ab dem nächsten Release-Tag.
 - **macOS als Ziel** (siehe Layout-Tabelle), Lösungswege im README.
 - Latenz im Alltag beobachten; `DICTUSB_SCAN`-Hänger mit neuerer
   CircuitPython-Version erneut testen.

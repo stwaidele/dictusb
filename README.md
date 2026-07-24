@@ -63,8 +63,8 @@ Jedes Release enthält eine `SHA256SUMS` zum Prüfen der Downloads
 - **Windows**: SmartScreen kennt die unsignierte App nicht — „Weitere
   Informationen" → „Trotzdem ausführen". Im Zweifel vorher die
   Prüfsumme gegen `SHA256SUMS` vergleichen.
-- **Linux**: Archiv entpacken, `./dictusb_app` starten (GTK 3 muss
-  installiert sein).
+- **Linux**: Archiv entpacken (legt ein Verzeichnis `dictUSB/` an),
+  `./dictUSB/dictusb_app` starten (GTK 3 muss installiert sein).
 
 <p>
   <img src="docs/img/app-blockmodus.png" width="49%" alt="Blockmodus: Text eingeben, prüfen und als Ganzes senden">

@@ -113,9 +113,10 @@ jobs:
         working-directory: app
         run: flutter build linux --release
       - name: Tarball
-        run: >
-          tar czf dictusb-app_linux_amd64.tar.gz
-          -C app/build/linux/x64/release/bundle .
+        # Top-Level-Verzeichnis dictUSB/ statt Tarbomb ins aktuelle Verzeichnis
+        run: |
+          mv app/build/linux/x64/release/bundle app/build/linux/x64/release/dictUSB
+          tar czf dictusb-app_linux_amd64.tar.gz -C app/build/linux/x64/release dictUSB
       - uses: actions/upload-artifact@v4
         with:
           name: linux
