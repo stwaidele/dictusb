@@ -9,8 +9,10 @@
 > live abgenommen (Linux am 2026-07-24, inkl. Dock-Icon).
 > **Unreleased auf `main`**: Linux-Starter-Script `dictUSB` — weitere
 > Änderungen werden **gesammelt**, erst dann v1.0.2 taggen.
-> Nächster Schritt: **WP6 Website in einer neuen Session** (dann WP5
-> Gehäuse, Abschnitt „Veröffentlichung").
+> **WP6-Inhalt ist fertig** (`docs/website-content.md`, gepusht);
+> Nächster Schritt: **WP6-Umsetzung als SvelteKit-Unterseite im
+> Werkzeugkasten-Workspace** (dann WP5 Gehäuse, Abschnitt
+> „Veröffentlichung").
 
 ## Was das ist
 
@@ -430,14 +432,27 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   System Events gehen, Text landet aber nirgends); Text ins Feld =
   `pbcopy` + Cmd+V nach `cliclick`-Klick ins Feld.
 
+- **WP6 Website, Teil 1 Inhalt — erledigt (2026-07-24, `8b54514`)**:
+  `docs/website-content.md` enthält den kompletten Seiteninhalt
+  (Hero, einführender Use Case „Diktiersoftware auf dem MacBook für
+  knapper ausgestattete Windows/Linux-Rechner ohne Installation",
+  Funktionsweise/Diagramm, App-Features, Downloads→releases/latest
+  inkl. Gatekeeper-/SmartScreen-Erststart-Hinweisen und
+  Linux-Start `./dictUSB/dictUSB`, Einkaufsliste, Sicherheit, FAQ,
+  Umsetzungsnotizen). Von Stefan redigiert. Im selben Commit:
+  **Einkaufsliste** (README + Website-Inhalt) verlinkt jetzt
+  **direkt** auf konkrete Artikel (`/dp/<ASIN>?tag=101010cloud-21`):
+  Pico `B0DNZKYGWP`, ESP32 `B0F3XMYYQY`, USB-C-Kabel `B01GGKYKQM`,
+  Micro-USB-Kabel `B08HSC3NXZ`; Kabel sind laut Fußnote ausdrücklich
+  Beispiele.
+
 - **Nächste Schritte (in dieser Reihenfolge)**:
-  1. **WP6 Website** (**in einer neuen Session starten**, entschieden
-     2026-07-24): Inhalt in `docs/website-content.md` vorbereiten
-     (Hero, Diagramm, Downloads→releases/latest, Hardware, Sicherheit,
-     FAQ); Umsetzung als Unterseite werkzeugkasten.online/dictusb im
-     separaten Werkzeugkasten-Workspace (sveltekit-tool-Konventionen).
-     Dort auch SmartScreen-/Gatekeeper-Hinweise für Nutzer erklären.
-     Linux-Startanleitung: `./dictUSB/dictUSB` (Starter-Script).
+  1. **WP6 Website, Teil 2 Umsetzung**: Unterseite
+     werkzeugkasten.online/dictusb im **separaten
+     Werkzeugkasten-Workspace** bauen (sveltekit-tool-Konventionen);
+     inhaltliche Quelle ist `docs/website-content.md` (dort auch
+     Umsetzungsnotizen: Seitenstruktur, Bildquellen aus `docs/img/`,
+     ASCII-Diagramm als SVG, keine harten Versionsnummern).
   2. **v1.0.2 taggen, wenn genug gesammelt ist** (entschieden
      2026-07-24: kein Release nur fürs Starter-Script; Kandidat:
      nach WP6). Beim Release-Test auf Linux das Starter-Script und
