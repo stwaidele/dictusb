@@ -1,13 +1,16 @@
 # Handoff: dictUSB — Text live auf einen anderen Rechner tippen
 
 > Übergabedokument für die Fortsetzung in einer Claude-Code-Session.
-> Stand: 2026-07-24 — **läuft produktiv auf zwei Geräten**,
-> **öffentlich**: github.com/stwaidele/dictusb (MIT), und **v1.0.1 ist
-> veröffentlicht und verifiziert** (signiert + notarisiert; Archive
-> mit Top-Level-Verzeichnis `dictUSB/`, Linux-Fenster-Icon,
-> `pico/`→`firmware/`). Alle drei Desktop-Clients live abgenommen
-> (Linux am 2026-07-24). Nächste Schritte: **WP6 Website, WP5
-> Gehäuse** (Abschnitt „Veröffentlichung").
+> Stand: 2026-07-24 (nachmittags) — **läuft produktiv auf zwei
+> Geräten**, **öffentlich**: github.com/stwaidele/dictusb (MIT), und
+> **v1.0.1 ist veröffentlicht und verifiziert** (signiert +
+> notarisiert; Archive mit Top-Level-Verzeichnis `dictUSB/`,
+> Linux-Fenster-Icon, `pico/`→`firmware/`). Alle drei Desktop-Clients
+> live abgenommen (Linux am 2026-07-24, inkl. Dock-Icon).
+> **Unreleased auf `main`**: Linux-Starter-Script `dictUSB` — weitere
+> Änderungen werden **gesammelt**, erst dann v1.0.2 taggen.
+> Nächster Schritt: **WP6 Website in einer neuen Session** (dann WP5
+> Gehäuse, Abschnitt „Veröffentlichung").
 
 ## Was das ist
 
@@ -428,12 +431,18 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   `pbcopy` + Cmd+V nach `cliclick`-Klick ins Feld.
 
 - **Nächste Schritte (in dieser Reihenfolge)**:
-  1. **WP6 Website**: Inhalt in `docs/website-content.md` vorbereiten
+  1. **WP6 Website** (**in einer neuen Session starten**, entschieden
+     2026-07-24): Inhalt in `docs/website-content.md` vorbereiten
      (Hero, Diagramm, Downloads→releases/latest, Hardware, Sicherheit,
      FAQ); Umsetzung als Unterseite werkzeugkasten.online/dictusb im
      separaten Werkzeugkasten-Workspace (sveltekit-tool-Konventionen).
      Dort auch SmartScreen-/Gatekeeper-Hinweise für Nutzer erklären.
-  2. **WP5 Gehäuse**: **erst separat mit Stefan besprechen** (eigene
+     Linux-Startanleitung: `./dictUSB/dictUSB` (Starter-Script).
+  2. **v1.0.2 taggen, wenn genug gesammelt ist** (entschieden
+     2026-07-24: kein Release nur fürs Starter-Script; Kandidat:
+     nach WP6). Beim Release-Test auf Linux das Starter-Script und
+     das Dock-Icon aus dem frischen tar.gz prüfen.
+  3. **WP5 Gehäuse**: **erst separat mit Stefan besprechen** (eigene
      Planungsrunde), dann OpenSCAD/`hardware/`.
   - Außerdem Stefan (GitHub-Settings): „Private vulnerability
     reporting" aktivieren, Repo-Beschreibung + Topics setzen.
