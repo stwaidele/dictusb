@@ -97,6 +97,7 @@ Buchstaben-Platzhalter. Wer das Icon dort möchte, legt einmalig eine
 
 ```sh
 APPDIR=/pfad/zum/entpackten/dictUSB   # absoluten Pfad eintragen
+mkdir -p ~/.local/share/applications  # fehlt auf frischen Systemen
 cat > ~/.local/share/applications/info.waidele.dictusb_app.desktop <<EOF
 [Desktop Entry]
 Type=Application
