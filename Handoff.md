@@ -1,13 +1,13 @@
 # Handoff: dictUSB — Text live auf einen anderen Rechner tippen
 
 > Übergabedokument für die Fortsetzung in einer Claude-Code-Session.
-> Stand: 2026-07-23 (abends) — **läuft produktiv auf zwei Geräten**,
-> **öffentlich**: github.com/stwaidele/dictusb (MIT), und **v1.0.0 ist
-> veröffentlicht und verifiziert** (signiert + notarisiert, App-Icon,
-> Screenshots im README). Nächste Schritte: **WP6 Website, WP5
-> Gehäuse** (Abschnitt „Veröffentlichung"). Davor: Modifier-Tipp
-> (Firmware 0.18), Flutter-Phasen 2–4, Quittungs-Fix (Firmware
-> quittiert NUR Lebenszeichen — siehe „Lebenszeichen-Quittungen").
+> Stand: 2026-07-24 — **läuft produktiv auf zwei Geräten**,
+> **öffentlich**: github.com/stwaidele/dictusb (MIT), und **v1.0.1 ist
+> veröffentlicht und verifiziert** (signiert + notarisiert; Archive
+> mit Top-Level-Verzeichnis `dictUSB/`, Linux-Fenster-Icon,
+> `pico/`→`firmware/`). Alle drei Desktop-Clients live abgenommen
+> (Linux am 2026-07-24). Nächste Schritte: **WP6 Website, WP5
+> Gehäuse** (Abschnitt „Veröffentlichung").
 
 ## Was das ist
 
@@ -395,6 +395,14 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   DMG/Zip/tar.gz/SHA256SUMS; DMG-Prüfsumme ok, `stapler validate` ok,
   `spctl` „accepted, source=Notarized Developer ID".
 
+- **`v1.0.1` veröffentlicht und verifiziert** (2026-07-24, App-Version
+  1.0.1+2): Archive mit Top-Level-Verzeichnis `dictUSB/`,
+  Linux-Fenster-Icon + Titel „dictUSB", `pico/`→`firmware/`.
+  Pipeline grün (alle 4 Jobs); geprüft: tar.gz und Zip enthalten
+  `dictUSB/` (inkl. `data/app_icon.png`), SHA256 ok, DMG `spctl`
+  „accepted, source=Notarized Developer ID" + `stapler validate` ok.
+  Offen bleibt nur der Sichttest des Linux-Dock-Icons.
+
 - **Screenshots — erledigt (2026-07-23, `3af36c5`)**: `docs/img/
   app-blockmodus.png` + `app-direktmodus.png` (README „Downloads")
   und `app-einstellungen.png` (`app/README.md`). Aufgenommen mit
@@ -476,10 +484,9 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   eine `.desktop`-Datei (Anleitung in `app/README.md`). **Der
   Icon-Fix ist noch ungetestet** (kein Linux-Build auf dem Mac) —
   beim nächsten Release/Build auf Linux prüfen.
-- **Archiv-Struktur seit 2026-07-24**: tar.gz **und** Windows-Zip
-  packen ein Top-Level-Verzeichnis `dictUSB/` (vorher Tarbomb bzw.
-  flaches Zip); die v1.0.0-Assets haben noch die alte Struktur — Fix
-  greift ab dem nächsten Release-Tag.
+- **Archiv-Struktur seit v1.0.1**: tar.gz **und** Windows-Zip packen
+  ein Top-Level-Verzeichnis `dictUSB/` (vorher Tarbomb bzw. flaches
+  Zip); nur die alten v1.0.0-Assets haben noch die flache Struktur.
 - **macOS als Ziel** (siehe Layout-Tabelle), Lösungswege im README.
 - Latenz im Alltag beobachten; `DICTUSB_SCAN`-Hänger mit neuerer
   CircuitPython-Version erneut testen.
