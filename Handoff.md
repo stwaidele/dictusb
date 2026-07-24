@@ -9,10 +9,12 @@
 > live abgenommen (Linux am 2026-07-24, inkl. Dock-Icon).
 > **Unreleased auf `main`**: Linux-Starter-Script `dictUSB` — weitere
 > Änderungen werden **gesammelt**, erst dann v1.0.2 taggen.
-> **WP6-Inhalt ist fertig** (`docs/website-content.md`, gepusht);
-> Nächster Schritt: **WP6-Umsetzung als SvelteKit-Unterseite im
-> Werkzeugkasten-Workspace** (dann WP5 Gehäuse, Abschnitt
-> „Veröffentlichung").
+> **WP6 ist komplett fertig** (2026-07-24): Inhalt in
+> `docs/website-content.md` **und** Umsetzung — die Seite ist live auf
+> <https://werkzeugkasten.online/dictusb> (gebaut im
+> Werkzeugkasten-Workspace `~/Claude/Werkzeugkasten`).
+> Nächste Schritte: **v1.0.2 taggen**, wenn genug gesammelt ist, dann
+> **WP5 Gehäuse** (Abschnitt „Veröffentlichung").
 
 ## Was das ist
 
@@ -446,18 +448,24 @@ cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
   Micro-USB-Kabel `B08HSC3NXZ`; Kabel sind laut Fußnote ausdrücklich
   Beispiele.
 
+- **WP6 Website, Teil 2 Umsetzung — erledigt (2026-07-24)**: Die
+  Unterseite <https://werkzeugkasten.online/dictusb> ist live —
+  umgesetzt im Werkzeugkasten-Workspace (`~/Claude/Werkzeugkasten`,
+  Route `src/routes/dictusb/+page.svelte`, Bilder aus `docs/img/`
+  nach `static/dictusb/` kopiert, Kachel im Hub, Kategorie
+  „Hardware-Projekte"). Inhaltliche Quelle bleibt
+  `docs/website-content.md` — bei Textänderungen zuerst hier pflegen,
+  dann drüben nachziehen. Download-Links zeigen auf
+  `releases/latest`, keine Versionsnummern hart verbaut;
+  Affiliate-Links mit Kennzeichnung. Details:
+  `~/Claude/Werkzeugkasten/Handoff.md`.
+
 - **Nächste Schritte (in dieser Reihenfolge)**:
-  1. **WP6 Website, Teil 2 Umsetzung**: Unterseite
-     werkzeugkasten.online/dictusb im **separaten
-     Werkzeugkasten-Workspace** bauen (sveltekit-tool-Konventionen);
-     inhaltliche Quelle ist `docs/website-content.md` (dort auch
-     Umsetzungsnotizen: Seitenstruktur, Bildquellen aus `docs/img/`,
-     ASCII-Diagramm als SVG, keine harten Versionsnummern).
-  2. **v1.0.2 taggen, wenn genug gesammelt ist** (entschieden
+  1. **v1.0.2 taggen, wenn genug gesammelt ist** (entschieden
      2026-07-24: kein Release nur fürs Starter-Script; Kandidat:
      nach WP6). Beim Release-Test auf Linux das Starter-Script und
      das Dock-Icon aus dem frischen tar.gz prüfen.
-  3. **WP5 Gehäuse**: **erst separat mit Stefan besprechen** (eigene
+  2. **WP5 Gehäuse**: **erst separat mit Stefan besprechen** (eigene
      Planungsrunde), dann OpenSCAD/`hardware/`.
   - Außerdem Stefan (GitHub-Settings): „Private vulnerability
     reporting" aktivieren, Repo-Beschreibung + Topics setzen.
