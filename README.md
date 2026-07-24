@@ -82,14 +82,17 @@ Eines von beiden genügt (beide laufen mit identischer Firmware):
 
 | Teil | ca. | Link |
 |---|---|---|
-| **Raspberry Pi Pico 2 W** (RP2350, WLAN) | 8 € | [Amazon-Suche](https://www.amazon.de/s?k=raspberry+pi+pico+2+w&tag=101010cloud-21)* |
-| **ESP32-S3 DevKitC-1 „N16R8"** (16 MB Flash) | 10 € | [Amazon-Suche](https://www.amazon.de/s?k=esp32-s3+devkitc+n16r8&tag=101010cloud-21)* |
-| Dazu: **USB-Datenkabel** (Pico: Micro-USB, ESP32: USB-C — kein reines Ladekabel) | 5 € | [Amazon-Suche](https://www.amazon.de/s?k=micro+usb+datenkabel&tag=101010cloud-21)* |
+| **Raspberry Pi Pico 2 W** (RP2350, WLAN) | 8 € | [Amazon](https://www.amazon.de/dp/B0DNZKYGWP?tag=101010cloud-21)* |
+| **ESP32-S3 DevKitC-1 „N16R8"** (16 MB Flash) | 10 € | [Amazon](https://www.amazon.de/dp/B0F3XMYYQY?tag=101010cloud-21)* |
+| Dazu passend: **USB-C-Datenkabel** (für den ESP32 — kein reines Ladekabel) | 5 € | [Amazon](https://www.amazon.de/dp/B01GGKYKQM?tag=101010cloud-21)* |
+| bzw. **Micro-USB-Datenkabel** (für den Pico — kein reines Ladekabel) | 5 € | [Amazon](https://www.amazon.de/dp/B08HSC3NXZ?tag=101010cloud-21)* |
 
 \* *Affiliate-Links (Werbung): Ein Kauf darüber unterstützt das
 Projekt und kostet dich nichts extra.* Die Boards gibt es genauso bei
 BerryBase, Reichelt & Co. — jedes DevKitC-1-Derivat mit nativem
 USB-Anschluss tut es (Details zum getesteten ESP32-Board: `ESP32.md`).
+Die verlinkten Kabel sind Beispiele — jedes **Datenkabel** mit passendem
+Stecker funktioniert.
 
 ## Pico einrichten
 
