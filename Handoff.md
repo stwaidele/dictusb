@@ -3,8 +3,9 @@
 > Übergabedokument für die Fortsetzung in einer Claude-Code-Session.
 > Stand: 2026-07-29 — läuft produktiv auf zwei Geräten, öffentlich unter
 > <https://github.com/stwaidele/dictusb> (MIT), Website live auf
-> <https://werkzeugkasten.online/dictusb>; **`v1.0.2` getaggt und
-> gepusht**, Release-Prüfung steht aus.
+> <https://werkzeugkasten.online/dictusb>; **`v1.0.2` veröffentlicht**
+> (Pipeline grün, Artefakte maschinell geprüft — offen ist nur der
+> Linux-Start aus dem Archiv).
 > Dauerhafte Fakten stehen in `CLAUDE.md`; hier steht nur, was **nicht**
 > aus Code und Git-Historie ersichtlich ist.
 
@@ -14,11 +15,17 @@ Stefan besprechen, nicht direkt mit OpenSCAD loslegen.
 
 ## Offene Punkte
 
-- [ ] **v1.0.2 prüfen** — Tag ist am 29.07. gepusht, die Pipeline lief an.
-      Nach Abschluss die übliche Kette: SHA256, `spctl -a -vv` und
-      `stapler validate` fürs DMG. **Auf Linux zusätzlich** aus dem
-      frischen tar.gz: Start über `./dictUSB/dictUSB` und das Dock-Icon —
-      beides ist seit v1.0.1 neu und war noch nie in einem Release-Archiv.
+- [ ] **v1.0.2 auf Linux gegenprüfen (nur das steht noch aus)** — aus dem
+      frischen tar.gz starten über `./dictUSB/dictUSB` und das Dock-Icon
+      ansehen. Das Starter-Script war noch nie in einem Release-Archiv;
+      bisher ist es nur per Dummy-Bundle auf dem Mac getestet.
+      Die maschinelle Kette ist am 29.07. **erledigt**: Pipeline alle 4
+      Jobs grün, SHA256SUMS stimmen, DMG `spctl` „accepted,
+      source=Notarized Developer ID" + `stapler validate` ok, tar.gz und
+      Zip haben das Top-Level-Verzeichnis `dictUSB/` mit ausführbarem
+      Starter-Script und `data/app_icon.png`. (Die **App im DMG** trägt
+      kein eigenes Ticket — nur das DMG wird gestapelt; `spctl` akzeptiert
+      sie trotzdem. Das ist seit v1.0.0 so und war nie ein Problem.)
 - [ ] **WP5 Gehäuse** — erst separat mit Stefan besprechen (eigene
       Planungsrunde), dann OpenSCAD unter `hardware/`.
 - [ ] **Zeichensatz-Test mit `DICTUSB_LAYOUT="us"`** — Versuch am
