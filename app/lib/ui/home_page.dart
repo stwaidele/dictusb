@@ -65,17 +65,47 @@ class _HomePageState extends State<HomePage> {
   // Alt-down, Ctrl-up, Alt-up und DANN erst V-down (alle Events echt, nicht
   // synthetisiert). Beim V ist also kein Modifier mehr gedrückt — weder in
   // logicalKeysPressed noch in einem mitgeführten Halte-Status. Deshalb
-  // Zeitfenster-Heuristik: V gilt als Diktat-Kombi, wenn Ctrl- und Alt-Down
-  // kurz zuvor gesehen wurden. Physisch gehaltene Kombis erkennt zusätzlich
-  // der logicalKeysPressed-Weg.
+  // Sequenz-Heuristik: V gilt als Diktat-Kombi, wenn Ctrl- und Alt-Down
+  // zuvor gesehen wurden und seither keine andere Taste kam. Physisch
+  // gehaltene Kombis erkennt zusätzlich der logicalKeysPressed-Weg.
   // Ankunftszeit im Handler statt e.timeStamp: synthetisch gepostete
-  // CGEvents tragen unbrauchbare Zeitstempel. Zwischen Ctrl/Alt-Antippen
-  // und dem V lässt Paraspeech ~2 s vergehen (gemessen: 1,9 s), daher das
-  // große Fenster; scharf bleibt die Erkennung, weil jeder andere
-  // Tastendruck dazwischen sie entwaffnet.
+  // CGEvents tragen unbrauchbare Zeitstempel.
+  //
+  // Die Wartezeit zwischen Ctrl/Alt-Antippen und dem V hängt an der
+  // DIKTATLÄNGE (Paraspeech tippt die Modifier früh an und schickt das V
+  // erst, wenn Aufnahme + Transkription fertig sind): bei einem kurzen
+  // Einwurf ~2 s (gemessen 1,9 s / 2,2 s), bei 1–3 Sätzen schon deutlich
+  // mehr. Ein knappes Zeitfenster ist deshalb strukturell falsch — es
+  // ließ genau die langen Diktate durchfallen (Bug 2026-07-29: statt des
+  // Textes kam ein „v" an). Das Fenster ist jetzt nur noch eine
+  // Veraltungs-Grenze; die Schärfe liefert die Entwaffnung durch jede
+  // andere Taste. Zusätzlich müssen Ctrl und Alt zusammengehören
+  // (maschinell angetippt, wenige Millisekunden auseinander) — sonst
+  // bewaffnet ein Strg-Shortcut plus ein viel späteres Alt die Erkennung.
   DateTime? _ctrlDownAt;
   DateTime? _altDownAt;
-  static const Duration _comboWindow = Duration(seconds: 5);
+  static const Duration _comboWindow = Duration(minutes: 10);
+  static const Duration _comboPairWindow = Duration(seconds: 1);
+
+  /// Diagnose-Log der Tasten-Erkennung, eingeschaltet über
+  /// `flutter run -d macos --dart-define=DICTUSB_DIAG=true`. Zeigt je
+  /// Event Art, Taste, gehaltene Tasten und den Abstand zum bewaffnenden
+  /// Ctrl/Alt — das Muster aus der Erst-Diagnose von 2026-07-22.
+  static const bool _diag = bool.fromEnvironment('DICTUSB_DIAG');
+
+  void _logKey(KeyEvent e, DateTime now) {
+    if (!_diag) return;
+    String age(DateTime? t) =>
+        t == null ? '—' : '${now.difference(t).inMilliseconds}ms';
+    final held = HardwareKeyboard.instance.logicalKeysPressed
+        .map((k) => k.debugName ?? '?')
+        .join(',');
+    debugPrint(
+      '[DIAG] ${e.runtimeType} ${e.logicalKey.debugName} '
+      'held={$held} ctrl=${age(_ctrlDownAt)} alt=${age(_altDownAt)} '
+      'synth=${e.synthesized}',
+    );
+  }
 
   bool _onGlobalKey(KeyEvent e) {
     // Im Einstellungsdialog gelten normale Eingaberegeln: keine
@@ -100,6 +130,7 @@ class _HomePageState extends State<HomePage> {
         e.physicalKey == PhysicalKeyboardKey.keyV;
 
     if (e is KeyUpEvent) {
+      _logKey(e, DateTime.now());
       if (_mode == UiMode.direct) {
         _completeModTap(k);
         return true; // im Direktmodus sickert nichts ins Framework
@@ -111,6 +142,7 @@ class _HomePageState extends State<HomePage> {
     // 2. Diktat-Heuristik (Paraspeech, Ctrl+Alt+V) — nur echte Downs.
     if (e is KeyDownEvent) {
       final now = DateTime.now();
+      _logKey(e, now);
       if (isCtrl) _ctrlDownAt = now;
       if (isAlt) _altDownAt = now;
       if (!isCtrl && !isAlt && !isV) {
@@ -124,11 +156,17 @@ class _HomePageState extends State<HomePage> {
                 pressed.contains(LogicalKeyboardKey.controlRight)) &&
             (pressed.contains(LogicalKeyboardKey.altLeft) ||
                 pressed.contains(LogicalKeyboardKey.altRight));
-        final recent = _ctrlDownAt != null &&
-            _altDownAt != null &&
-            now.difference(_ctrlDownAt!) < _comboWindow &&
-            now.difference(_altDownAt!) < _comboWindow;
-        if (held || recent) {
+        final ctrlAt = _ctrlDownAt;
+        final altAt = _altDownAt;
+        // Ctrl und Alt gehören zusammen (dicht beieinander angetippt) und
+        // die Bewaffnung ist nicht veraltet; wie lange das Diktat gedauert
+        // hat, spielt bewusst keine Rolle.
+        final armed = ctrlAt != null &&
+            altAt != null &&
+            ctrlAt.difference(altAt).abs() < _comboPairWindow &&
+            now.difference(ctrlAt) < _comboWindow &&
+            now.difference(altAt) < _comboWindow;
+        if (held || armed) {
           _ctrlDownAt = null;
           _altDownAt = null;
           _pasteDictation();

@@ -56,6 +56,74 @@ void main() {
     expect(find.text('Senden'), findsOneWidget);
   });
 
+  // Regression zu Bug 2026-07-29: Bei langen Diktaten vergehen zwischen dem
+  // Ctrl/Alt-Antippen und dem V viel mehr als die früheren 5 s (Paraspeech
+  // schickt das V erst nach Aufnahme + Transkription). Der Text wurde dann
+  // nicht eingefügt, stattdessen kam ein „v" durch. Der Test wartet echte
+  // Zeit ab — die Heuristik liest die Uhr, nicht die Test-Fake-Zeit.
+  testWidgets('Diktat: Ctrl+Alt … lange Pause … V fügt die Zwischenablage ein',
+      (tester) async {
+    const dictated = 'Ein langer diktierter Satz.';
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async => call.method == 'Clipboard.getData'
+          ? <String, dynamic>{'text': dictated}
+          : null,
+    );
+    addTearDown(() => tester.binding.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, null));
+
+    await tester.pumpWidget(const DictusbApp());
+    await tester.pump();
+
+    // Paraspeech tippt die Modifier nur an und hält sie nicht.
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.altLeft);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.altLeft);
+
+    // Diktatdauer: deutlich länger als das alte 5-s-Fenster.
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 6500)),
+    );
+
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.keyV);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.keyV);
+    await tester.pumpAndSettle();
+
+    expect(find.text(dictated), findsOneWidget);
+    expect(find.text('v'), findsNothing);
+  });
+
+  testWidgets('Diktat: einzeln angetippte Modifier bewaffnen nicht',
+      (tester) async {
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async => call.method == 'Clipboard.getData'
+          ? <String, dynamic>{'text': 'darf nicht eingefügt werden'}
+          : null,
+    );
+    addTearDown(() => tester.binding.defaultBinaryMessenger
+        .setMockMethodCallHandler(SystemChannels.platform, null));
+
+    await tester.pumpWidget(const DictusbApp());
+    await tester.pump();
+
+    // Strg-Shortcut jetzt, Alt viel später: gehört nicht zusammen.
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 1200)),
+    );
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.altLeft);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.altLeft);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.keyV);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.keyV);
+    await tester.pumpAndSettle();
+
+    expect(find.text('darf nicht eingefügt werden'), findsNothing);
+  });
+
   testWidgets('Snippet: Knopf und Hotkey fügen im Blockmodus ins Textfeld ein',
       (tester) async {
     SharedPreferences.setMockInitialValues({

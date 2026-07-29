@@ -1,14 +1,16 @@
 # Handoff: dictUSB — Text live auf einen anderen Rechner tippen
 
 > Übergabedokument für die Fortsetzung in einer Claude-Code-Session.
-> Stand: 2026-07-24 (nachmittags) — **läuft produktiv auf zwei
+> Stand: 2026-07-29 — **läuft produktiv auf zwei
 > Geräten**, **öffentlich**: github.com/stwaidele/dictusb (MIT), und
 > **v1.0.1 ist veröffentlicht und verifiziert** (signiert +
 > notarisiert; Archive mit Top-Level-Verzeichnis `dictUSB/`,
 > Linux-Fenster-Icon, `pico/`→`firmware/`). Alle drei Desktop-Clients
 > live abgenommen (Linux am 2026-07-24, inkl. Dock-Icon).
-> **Unreleased auf `main`**: Linux-Starter-Script `dictUSB` — weitere
-> Änderungen werden **gesammelt**, erst dann v1.0.2 taggen.
+> **Unreleased auf `main`**: Linux-Starter-Script `dictUSB` und der
+> **Diktat-Fix für lange Texte** (2026-07-29, abgenommen — Abschnitt
+> „Diktat / Paraspeech"). Weitere Änderungen werden **gesammelt**, erst
+> dann v1.0.2 taggen.
 > **WP6 ist komplett fertig** (2026-07-24): Inhalt in
 > `docs/website-content.md` **und** Umsetzung — die Seite ist live auf
 > <https://werkzeugkasten.online/dictusb> (gebaut im
@@ -235,15 +237,42 @@ belegt, Erkenntnisse gelten für jede künftige Kombi-Erkennung):
    (gemessen 1,9 s und 2,2 s) — vermutlich schreibt Paraspeech in der
    Zeit die Zwischenablage.
 
-**Lösung (in `ui/home_page.dart`, `_onGlobalKey`):** Zeitfenster-Heuristik
-— ein `v`-KeyDown gilt als Diktat-Kombi, wenn Ctrl- und Alt-Down
-innerhalb der letzten **5 s** ankamen **und** dazwischen keine andere
-Taste gedrückt wurde (jeder andere KeyDown entwaffnet die Erkennung —
-so löst z. B. `Alt+L` für `@` plus späteres `v` nichts aus). Physisch
-*gehaltenes* Ctrl+Alt+V greift zusätzlich über `logicalKeysPressed`.
-Bei Treffer wird die Kombi verschluckt und `_pasteDictation()` fügt die
-Zwischenablage an der Cursorposition ein. Das Textfeld ist bewusst auch
-ohne Verbindung aktiv (vorab diktieren, später senden).
+**Lösung (in `ui/home_page.dart`, `_onGlobalKey`):** Sequenz-Heuristik
+— ein `v`-KeyDown gilt als Diktat-Kombi, wenn Ctrl- und Alt-Down zuvor
+ankamen **und** dazwischen keine andere Taste gedrückt wurde (jeder
+andere KeyDown entwaffnet die Erkennung — so löst z. B. `Alt+L` für `@`
+plus späteres `v` nichts aus). Physisch *gehaltenes* Ctrl+Alt+V greift
+zusätzlich über `logicalKeysPressed`. Bei Treffer wird die Kombi
+verschluckt und `_pasteDictation()` fügt die Zwischenablage an der
+Cursorposition ein. Das Textfeld ist bewusst auch ohne Verbindung aktiv
+(vorab diktieren, später senden).
+
+**Nachtrag 2026-07-29 — die Wartezeit skaliert mit der Diktatlänge
+(Bug gefunden und behoben, von Stefan abgenommen):** Die ursprüngliche
+Fassung verlangte Ctrl/Alt **innerhalb der letzten 5 s**. Damit fielen
+genau die langen Diktate durch: Paraspeech tippt die Modifier an,
+*bevor* es Aufnahme und Transkription abschließt — die Lücke bis zum
+`v` wächst also mit dem Gesprochenen. Schon **1–3 Sätze** reichten;
+statt des Textes kam das `v` als normaler Buchstabe an (Direktmodus:
+„v" am Zielrechner, Blockmodus: „v" im Feld). **Lehre: jedes feste
+Zeitfenster ist hier strukturell falsch** — die Trennschärfe kommt aus
+der Sequenz, nicht aus der Uhr. Seitdem:
+
+- `_comboWindow` = **10 min**, reine Veraltungs-Grenze statt Diktat-Timer;
+  der Garant bleibt die Entwaffnung durch jede andere Taste.
+- Neu `_comboPairWindow` = **1 s**: Ctrl und Alt müssen zusammengehören
+  (maschinell angetippt sind es Millisekunden). Ersetzt die Schärfe, die
+  das kurze Fenster vorher nebenbei lieferte — ein Strg-Shortcut plus ein
+  viel späteres Alt bewaffnet nicht mehr.
+- Zwei Regressionstests in `app/test/widget_test.dart` (Paraspeech-Folge
+  mit 6,5 s **echter** Pause muss einfügen; einzeln angetippte Modifier
+  dürfen nicht bewaffnen). Sie warten echte Zeit ab, weil die Heuristik
+  die Wanduhr liest — Gegenprobe gemacht: mit dem alten 5-s-Fenster
+  fällt der erste Test durch.
+- **Diagnose-Schalter** statt Wegwerf-Logging: `--dart-define=DICTUSB_DIAG=true`
+  schaltet `_logKey()` scharf (Event-Art, Taste, gehaltene Tasten,
+  Abstand zum bewaffnenden Ctrl/Alt, `synthesized`) —
+  `cd app && flutter run -d macos --dart-define=DICTUSB_DIAG=true`.
 
 **Falls die Erkennung je wieder ausfällt:** Debug-Muster aus dieser
 Diagnose — im `HardwareKeyboard`-Handler jede Taste mit
@@ -330,7 +359,7 @@ sie je reaktiviert wird, gleiche Regel portieren.
 ### Verifikation (Krypto ohne Netz, ich-selbst-fähig)
 
 ```sh
-cd app && flutter analyze && flutter test   # 18/18 (17 Vektoren + Widget)
+cd app && flutter analyze && flutter test   # 45/45 (17 Vektoren + Widget/Keymap)
 cd app && dart run bin/probe.dart           # nur aus echtem Terminal!
 ```
 
